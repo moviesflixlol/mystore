@@ -623,7 +623,7 @@ public class MainActivity extends AppCompatActivity {
                 int sessionId = installer.createSession(params);
                 PackageInstaller.Session session = installer.openSession(sessionId);
 
-                OutputStream out = session.openOutputStream("package", 0, apkFile.length());
+                OutputStream out = session.openWrite("package", 0, apkFile.length());
                 FileInputStream in = new FileInputStream(apkFile);
                 byte[] buffer = new byte[65536];
                 int c;
