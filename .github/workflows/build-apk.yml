@@ -33,7 +33,7 @@ jobs:
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: mystore-v1.0.3-APK
+          name: mystore-v1.0.4-APK
           path: app/build/outputs/apk/release/*.apk
           retention-days: 30
 
@@ -41,17 +41,18 @@ jobs:
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/heads/main') || github.event_name == 'workflow_dispatch'
         with:
-          tag_name: v1.0.3
-          name: mystore v1.0.3 (Official Release)
+          tag_name: v1.0.4
+          name: mystore v1.0.4 (Official Release)
           body: |
-            ## mystore — Android App Store (Release v1.0.3)
+            ## mystore — Android App Store (Release v1.0.4)
 
-            - **In-App Package Installer (No External Redirects)**: Native background downloader with direct in-app package installer handoff using `FileProvider` and `ACTION_VIEW` (`application/vnd.android.package-archive`).
-            - **Real System Download Notifications**: Download progress updates in the notification shade with byte counter and percentage, using the store's red M logo.
-            - **Notification Permission & Runtime Permissions**: Full support for Android 13+ `POST_NOTIFICATIONS`, `REQUEST_INSTALL_PACKAGES`, `QUERY_ALL_PACKAGES`, and foreground services.
-            - **Dedicated "No Network" Offline Page**: Automatic connection monitoring with modern offline screen and instant "Try Again" retry action.
-            - **Local Metadata Caching**: Persistent offline/instant caching for home feeds, category rankings, and visited applications for zero-wait 0ms navigation.
-            - **Clean & Fast**: Compact ~5 MB signed APK.
+            - **Custom In-App Package Installer**: Own installer sheet powered by Android `PackageInstaller.Session` — completely independent from phone defaults.
+            - **Official Share Links**: Share apps & developer pages using domain `https://mystore.movieflix.lol/` via Android native share sheet.
+            - **Verified Company Badge**: Sleek, modern verified publisher badge on company pages.
+            - **Video Support**: Integrated inline video player and trailer support for applications and games.
+            - **Pull to Refresh**: Smooth `SwipeRefreshLayout` with brand red spinner.
+            - **Installed App Lifecycle**: Detects installed applications on the device — shows "Open" & "Uninstall" or "Update" & "Uninstall" instead of downloading again.
+            - **Guaranteed No Network Page**: Dedicated offline screen with auto-reconnection and instant retry.
 
             Download the attached `app-release.apk` below and install directly on your Android device.
           files: app/build/outputs/apk/release/*.apk

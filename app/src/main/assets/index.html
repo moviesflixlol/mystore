@@ -1007,6 +1007,138 @@ button.get.installed, button.install-btn.installed{
 }
 .retry-btn:active{transform:scale(0.96);background:#b80710;}
 
+
+/* Company Verified Badge */
+.dev-verified-badge{
+  background:rgba(0,210,106,0.15) !important;
+  color:#00d26a !important;
+  border:1px solid rgba(0,210,106,0.35) !important;
+  font-weight:700 !important;
+  letter-spacing:0.3px;
+}
+
+/* In-App Package Installer Sheet */
+.inapp-installer-overlay{
+  position:fixed;
+  inset:0;
+  z-index:99999;
+  background:rgba(0,0,0,0.85);
+  backdrop-filter:blur(8px);
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  padding:0;
+}
+.inapp-installer-overlay[hidden]{display:none !important;}
+.inapp-installer-card{
+  background:#141414;
+  border:1px solid #282828;
+  border-radius:28px 28px 0 0;
+  width:100%;
+  max-width:540px;
+  padding:28px 24px calc(24px + env(safe-area-inset-bottom, 12px));
+  box-shadow:0 -10px 40px rgba(0,0,0,0.7);
+  animation:slideUp 0.25s ease-out;
+}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.inapp-installer-header{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  margin-bottom:20px;
+}
+.inapp-installer-icon{
+  width:64px;
+  height:64px;
+  border-radius:16px;
+  object-fit:cover;
+  background:#222;
+  border:1px solid #333;
+}
+.inapp-installer-header h3{
+  margin:0 0 4px;
+  font-size:19px;
+  font-weight:700;
+  color:#fff;
+}
+.inapp-installer-header p{
+  margin:0;
+  font-size:13px;
+  color:var(--mu);
+}
+.installer-notice{
+  background:#1c1c1c;
+  border:1px solid #2a2a2a;
+  border-radius:14px;
+  padding:12px 16px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:22px;
+  font-size:13.5px;
+  color:#ddd;
+}
+.inapp-installer-actions{
+  display:flex;
+  gap:12px;
+}
+.installer-cancel-btn{
+  flex:1;
+  height:48px;
+  border-radius:14px;
+  background:#202020;
+  border:1px solid #333;
+  color:#ccc;
+  font-size:15px;
+  font-weight:700;
+  cursor:pointer;
+}
+.installer-confirm-btn{
+  flex:1;
+  height:48px;
+  border-radius:14px;
+  background:#e50914;
+  border:none;
+  color:#fff;
+  font-size:15px;
+  font-weight:700;
+  cursor:pointer;
+}
+.installer-confirm-btn:active{background:#b80710;}
+
+/* App Details Action Buttons */
+.uninstall-btn{
+  height:48px;
+  border-radius:14px;
+  background:#1c1c1c;
+  color:#ff5252;
+  border:1px solid rgba(255,82,82,0.3);
+  padding:0 20px;
+  font-size:15px;
+  font-weight:700;
+  cursor:pointer;
+  transition:transform 0.15s, background 0.15s;
+}
+.uninstall-btn:active{transform:scale(0.96);background:rgba(255,82,82,0.15);}
+.install-btn.open-action{background:#00d26a;color:#000;}
+.install-btn.open-action:active{background:#00a855;}
+
+/* Video Player in App Details */
+.video-preview-wrap{
+  margin:16px 20px 8px;
+  border-radius:20px;
+  overflow:hidden;
+  border:1px solid var(--line);
+  background:#000;
+  position:relative;
+}
+.video-preview-wrap video{
+  width:100%;
+  max-height:240px;
+  display:block;
+  object-fit:contain;
+}
+
 </style>
 </head>
 <body>
@@ -1038,6 +1170,30 @@ button.get.installed, button.install-btn.installed{
     <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg>Me
   </button>
 </nav>
+
+
+<!-- In-App Package Installer Sheet (Own Installer, No Mobile Default Dependency) -->
+<div id="inapp-installer-modal" class="inapp-installer-overlay" hidden>
+  <div class="inapp-installer-card">
+    <div class="inapp-installer-header">
+      <img id="installer-app-icon" src="" class="inapp-installer-icon" alt="">
+      <div>
+        <h3 id="installer-app-name">Package</h3>
+        <p id="installer-app-meta">Ready to install • Verified Package</p>
+      </div>
+    </div>
+    <div class="inapp-installer-body">
+      <div class="installer-notice">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00d26a" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        <span>Package verified safe by mystore. Ready to install.</span>
+      </div>
+    </div>
+    <div class="inapp-installer-actions">
+      <button class="installer-cancel-btn" id="installer-btn-cancel">Cancel</button>
+      <button class="installer-confirm-btn" id="installer-btn-confirm">Install Now</button>
+    </div>
+  </div>
+</div>
 
 <!-- Fullscreen Search Page (Modern, Mobile-Friendly, Vector Icons Only) -->
 <div id="search-view" class="fullscreen-view" role="dialog" aria-modal="true">
@@ -1185,8 +1341,11 @@ button.get.installed, button.install-btn.installed{
     <div style="flex:1; min-width:0;">
       <h1 id="dev-title" style="font-size:23px; font-weight:800; margin:0 0 5px; letter-spacing:-0.3px;">Developer</h1>
       <div style="display:flex; flex-wrap:wrap; gap:6px; align-items:center;">
-        <span class="badge trusted">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="display:inline-block; vertical-align:middle; margin-right:3px;"><polyline points="20 6 9 17 4 12"/></svg>Verified Publisher
+        <span class="badge dev-verified-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#00d26a" style="display:inline-block; vertical-align:-2px; margin-right:4px;">
+            <path d="M12 2l2.4 2.1 3.2-.2 1.3 2.9 3 1.1-.3 3.2 2 2.5-2 2.5.3 3.2-3 1.1-1.3 2.9-3.2-.2L12 22l-2.4-2.1-3.2.2-1.3-2.9-3-1.1.3-3.2-2-2.5 2-2.5-.3-3.2 3-1.1 1.3-2.9 3.2.2L12 2z"/>
+            <path d="m9 12 2 2 4-4" fill="none" stroke="#0a0a0a" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>Verified Company
         </span>
         <span class="badge" id="dev-count">Checking published apps...</span>
       </div>
@@ -1277,7 +1436,9 @@ window.onDownloadProgress = function(pkg, progress){
   }
 };
 
-window.onDownloadComplete = function(pkg){
+let lastDownloadedPkg = '';
+window.onDownloadComplete = function(pkg, appName){
+  lastDownloadedPkg = pkg;
   for(const k in activeDownloads){
     const dl = activeDownloads[k];
     if(dl && (dl.pkg === pkg || dl.id == pkg)){
@@ -1286,7 +1447,20 @@ window.onDownloadComplete = function(pkg){
       delete activeDownloads[pkg];
     }
   }
-  toast('Download complete! Opening Package Installer...');
+
+  // Open own in-app package installer dialog
+  const modal = $('#inapp-installer-modal');
+  if(modal){
+    $('#installer-app-name').textContent = appName || 'Downloaded Package';
+    $('#installer-app-meta').textContent = 'Ready to install • ' + pkg;
+    const a = Object.values(cache).find(x => x && (x.pkg === pkg || x.name === appName));
+    if(a && a.icon){
+      $('#installer-app-icon').src = a.icon;
+    }
+    modal.hidden = false;
+  }
+
+  toast('Download complete! Package ready to install.');
   if(page === 2 && !det.classList.contains('open')){
     checkUpdates();
   }
@@ -1413,7 +1587,8 @@ async function api(p){
     if(r.ok) return await r.json();
   }catch(_){}
 
-  throw Error('Failed to load data from server');
+  window.showNoNetwork();
+  throw Error('No network connection');
 }
 
 const cache={};
@@ -1465,7 +1640,10 @@ const searchHistory = {
 };
 
 const setNav=n=>document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',+b.dataset.nav===n));
-const li=a=>`<div class="li"><img src="${esc(a.icon)}" alt="" loading="lazy" data-open="${a.id}"><div class="m" data-open="${a.id}"><b>${esc(a.name)}</b><span class="rt">${rt(a.rate)} · ${fmtS(a.size)}${a.dl?' · '+fmtN(a.dl):''}</span><span class="dev-link" data-dev="${esc(a.dev)}">${esc(a.dev)}</span></div><button class="get" data-get="${a.id}">Install</button></div>`;
+const li=a=>{
+  const isInst = (window.Android && typeof window.Android.isPackageInstalled === 'function' && a.pkg && window.Android.isPackageInstalled(a.pkg));
+  return `<div class="li"><img src="${esc(a.icon)}" alt="" loading="lazy" data-open="${a.id}"><div class="m" data-open="${a.id}"><b>${esc(a.name)}</b><span class="rt">${rt(a.rate)} · ${fmtS(a.size)}${a.dl?' · '+fmtN(a.dl):''}</span><span class="dev-link" data-dev="${esc(a.dev)}">${esc(a.dev)}</span></div>${isInst ? `<button class="get open-action" style="background:#00d26a;color:#000;font-weight:700;" data-launch="${esc(a.pkg)}">Open</button>` : `<button class="get" data-get="${a.id}">Install</button>`}</div>`;
+};
 const fail=(el,e)=>{if(!el)return;el.hidden=false;el.className='st';el.innerHTML=`Couldn’t load data: ${esc(e.message||'network error')}`};
 
 /* Clean vector logos for major tech developers */
@@ -1589,6 +1767,10 @@ function listView(title,base){
 
 /* Home Feed with Modern Google Play / App Store style sections */
 async function home(){
+  const isOnline = navigator.onLine && (!window.Android || !window.Android.isNetworkAvailable || window.Android.isNetworkAvailable());
+  if(!isOnline){
+    window.showNoNetwork();
+  }
   main.innerHTML=`
     <div class="hero skel" id="hero"></div>
     <div class="dots" id="dots"></div>
@@ -2379,7 +2561,43 @@ function renderAppDetails(a, m){
   const votes = R.votes || [];
   const mx = Math.max(1, ...(votes.map(v => v.count) || [1]));
   const devName = m?.developer?.name || a.dev || '';
-  const desc = m?.media?.description || a.desc || `${a.name} is available for direct download on Nuratix Store.`;
+  const desc = m?.media?.description || a.desc || `${a.name} is available for direct download on mystore.`;
+  const pkg = m?.package || a.pkg || a.package || '';
+
+  // Video support
+  let videoUrl = '';
+  if(m?.media?.videos && m.media.videos.length){
+    videoUrl = https(m.media.videos[0].url || m.media.videos[0].video || m.media.videos[0]);
+  } else if(m?.media?.video){
+    videoUrl = https(m.media.video);
+  }
+
+  // Check if app is already installed on user's device
+  const isInstalled = (window.Android && typeof window.Android.isPackageInstalled === 'function' && pkg && window.Android.isPackageInstalled(pkg));
+  let actionButtonsHtml = '';
+
+  if(isInstalled){
+    const deviceCode = window.Android.getPackageVersionCode(pkg);
+    const storeCode = Number(m?.file?.vercode || a.vercode || 0);
+    const isUpdate = (storeCode > deviceCode && deviceCode > 0);
+
+    if(isUpdate){
+      actionButtonsHtml = `
+        <button class="install-btn update-action" id="det-install-btn" data-get="${id}">Update App</button>
+        <button class="uninstall-btn" data-uninstall="${esc(pkg)}">Uninstall</button>
+      `;
+    } else {
+      actionButtonsHtml = `
+        <button class="install-btn open-action" data-launch="${esc(pkg)}">Open</button>
+        <button class="uninstall-btn" data-uninstall="${esc(pkg)}">Uninstall</button>
+      `;
+    }
+  } else {
+    const isSplit = !!(m?.file?.splits && m.file.splits.length);
+    actionButtonsHtml = `
+      <button class="install-btn" id="det-install-btn" data-get="${id}">${isSplit ? 'Install Split APKS' : 'Install APK'}</button>
+    `;
+  }
 
   det.innerHTML = `
     <button class="action-btn back-btn" data-close aria-label="Back">
@@ -2408,9 +2626,19 @@ function renderAppDetails(a, m){
       <div><b>${fmtS(m?.file?.filesize || a.size)}</b><span>Size</span></div>
     </div>
     <div class="inst">
-      <button class="install-btn" id="det-install-btn" data-get="${id}">${(m?.file?.splits && m.file.splits.length) ? 'Install Split APKS' : 'Install APK'}</button>
+      ${actionButtonsHtml}
       <button class="fav-btn" data-wl="${id}" aria-label="Wishlist">${wl.has(id) ? icoHeartFilled : icoHeartOutline}</button>
     </div>
+
+    ${videoUrl ? `
+      <div class="video-preview-wrap">
+        <video controls playsinline poster="${esc(gfx || a.icon)}" preload="metadata">
+          <source src="${esc(videoUrl)}">
+          Your browser does not support video playback.
+        </video>
+      </div>
+    ` : ''}
+
     ${shots.length ? `<div class="shots">${shots.map(s => `<img src="${esc(s)}" alt="" loading="lazy">`).join('')}</div>` : (m ? '' : `<div class="shots"><div class="skel" style="height:250px;width:140px;border-radius:16px;"></div><div class="skel" style="height:250px;width:140px;border-radius:16px;"></div><div class="skel" style="height:250px;width:140px;border-radius:16px;"></div></div>`)}
     <div class="rh pad"><h2>About this app</h2></div>
     <div class="about">${esc(desc)}</div>
@@ -2423,7 +2651,7 @@ function renderAppDetails(a, m){
     <div class="pad" style="margin-top:24px">
       ${m?.file?.malware?.rank === 'TRUSTED' ? `<span class="badge trusted">${icoCheck}Verified Safe &amp; Clean</span>` : `<span class="badge trusted">${icoCheck}Official Package</span>`}
       <span class="badge">v${esc(m?.file?.vername || a.ver || '1.0')}</span>
-      <span class="badge">${esc(m?.package || a.pkg)}</span>
+      <span class="badge">${esc(pkg)}</span>
       <span class="badge">App ID: ${id}</span>
     </div>
 
@@ -2763,8 +2991,16 @@ async function triggerDownloadAndInstall(id){
 }
 
 function shareApp(id){
-  const url = window.location.origin + '/app/' + id;
-  if(navigator.clipboard){
+  const a = cache[id] || metadataCache.get('app_' + id) || {};
+  const appName = a.name || 'Application';
+  const url = 'https://mystore.movieflix.lol/app/' + id;
+  if(window.Android && typeof window.Android.shareText === 'function'){
+    window.Android.shareText('Share ' + appName, 'Get ' + appName + ' on mystore:', url);
+    return;
+  }
+  if(navigator.share){
+    navigator.share({ title: appName, text: 'Get ' + appName + ' on mystore', url }).catch(()=>{});
+  } else if(navigator.clipboard){
     navigator.clipboard.writeText(url).then(()=>toast('Copied link: ' + url));
   } else {
     toast('Link: ' + url);
@@ -2772,9 +3008,15 @@ function shareApp(id){
 }
 
 function shareDev(){
-  const devTitle = $('#dev-title')?.textContent || 'developer';
-  const url = window.location.origin + '/dev/' + encodeURIComponent(devTitle);
-  if(navigator.clipboard){
+  const devTitle = $('#dev-title')?.textContent || 'Publisher';
+  const url = 'https://mystore.movieflix.lol/dev/' + encodeURIComponent(devTitle);
+  if(window.Android && typeof window.Android.shareText === 'function'){
+    window.Android.shareText('Share ' + devTitle, 'Explore official apps by ' + devTitle + ' on mystore:', url);
+    return;
+  }
+  if(navigator.share){
+    navigator.share({ title: devTitle, text: 'Explore official apps by ' + devTitle + ' on mystore', url }).catch(()=>{});
+  } else if(navigator.clipboard){
     navigator.clipboard.writeText(url).then(()=>toast('Copied developer link: ' + url));
   } else {
     toast('Link: ' + url);
@@ -2793,6 +3035,46 @@ document.addEventListener('click',e=>{
       [home, games, me][page]();
     } else {
       toast('Still offline. Please check your connection.');
+    }
+    return;
+  }
+
+  
+  // In-app installer sheet actions
+  if(e.target.closest('#installer-btn-cancel')){
+    const modal = $('#inapp-installer-modal');
+    if(modal) modal.hidden = true;
+    return;
+  }
+  if(e.target.closest('#installer-btn-confirm')){
+    const modal = $('#inapp-installer-modal');
+    if(modal) modal.hidden = true;
+    if(window.Android && typeof window.Android.installDownloadedPackage === 'function' && lastDownloadedPkg){
+      window.Android.installDownloadedPackage(lastDownloadedPkg);
+    }
+    return;
+  }
+
+  // Launch installed app
+  const launchBtn = e.target.closest('[data-launch]');
+  if(launchBtn){
+    const p = launchBtn.dataset.launch;
+    if(window.Android && typeof window.Android.launchApp === 'function'){
+      window.Android.launchApp(p);
+    } else {
+      toast('Opening ' + p);
+    }
+    return;
+  }
+
+  // Uninstall app
+  const uninstBtn = e.target.closest('[data-uninstall]');
+  if(uninstBtn){
+    const p = uninstBtn.dataset.uninstall;
+    if(window.Android && typeof window.Android.uninstallApp === 'function'){
+      window.Android.uninstallApp(p);
+    } else {
+      toast('Uninstalling ' + p);
     }
     return;
   }
