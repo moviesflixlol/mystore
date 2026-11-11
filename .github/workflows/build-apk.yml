@@ -33,7 +33,7 @@ jobs:
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Nuratix-Store-APK
+          name: mystore-v1.0.1-APK
           path: app/build/outputs/apk/release/*.apk
           retention-days: 30
 
@@ -41,16 +41,17 @@ jobs:
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/heads/main') || github.event_name == 'workflow_dispatch'
         with:
-          tag_name: v1.0.0
-          name: Nuratix Store v1.0.0 (Official Release)
+          tag_name: v1.0.1
+          name: mystore v1.0.1 (Official Release)
           body: |
-            ## Nuratix Store — Android App Store (Release v1.0.0)
+            ## mystore — Android App Store (Release v1.0.1)
 
-            - **Lightweight APK** (~2.5 MB)
-            - **Native Android System WebView** (No bundled 300MB Chromium engine)
-            - **Zero Emojis**: Clean SVG vector icons only
+            - **Package Name**: `com.mystore.movieflix`
+            - **Adaptive Launcher Icons**: Full support for Android 8 - 14+ adaptive icons
+            - **CORS & Network Fix**: Modern `WebViewAssetLoader` with 0ms load and no 401 errors
+            - **Lightweight APK** (~5 MB): No bloated 300MB Chromium binaries
             - **Split APK & Package Installer Support**: Circular progress download bar and native installer handoff
             - **Automated Update Manager**: In-app package tracking & update checks
 
-            Download the attached APK below and install it directly on any Android device.
+            Download the attached `app-release.apk` below and install it directly on your Android device.
           files: app/build/outputs/apk/release/*.apk
