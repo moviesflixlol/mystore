@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.nuratix.store'
+    namespace 'com.mystore.movieflix'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.nuratix.store"
+        applicationId "com.mystore.movieflix"
         minSdk 24
         targetSdk 34
         versionCode 1

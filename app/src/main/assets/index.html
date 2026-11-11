@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0a0a0a">
-<title>Nuratix Store</title>
-<meta name="description" content="Discover, explore, and download top Android applications and games directly from Nuratix Store.">
+<title>mystore</title>
+<meta name="description" content="Discover, explore, and download top Android applications and games directly from mystore.">
 
 <!-- Search Engine & App Icons -->
 <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
@@ -18,9 +18,9 @@
 
 <!-- OpenGraph / Social Search Previews -->
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Nuratix Store">
-<meta property="og:title" content="Nuratix Store — Android App Store">
-<meta property="og:description" content="Discover, explore, and download top Android applications and games directly from Nuratix Store.">
+<meta property="og:site_name" content="mystore">
+<meta property="og:title" content="mystore — Android App Store">
+<meta property="og:description" content="Discover, explore, and download top Android applications and games directly from mystore.">
 <meta property="og:image" content="/icon-512.png">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="512">
@@ -28,8 +28,8 @@
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Nuratix Store">
-<meta name="twitter:description" content="Discover, explore, and download top Android applications and games directly from Nuratix Store.">
+<meta name="twitter:title" content="mystore">
+<meta name="twitter:description" content="Discover, explore, and download top Android applications and games directly from mystore.">
 <meta name="twitter:image" content="/icon-512.png">
 
 <!-- Google Search Structured Data (Rich App Result) -->
@@ -37,12 +37,12 @@
 {
   "@context": "https://schema.org",
   "@type": "WebApplication",
-  "name": "Nuratix Store",
+  "name": "mystore",
   "applicationCategory": "Application",
   "operatingSystem": "Android",
   "image": "/icon-512.png",
   "logo": "/header-logo-tight.png",
-  "description": "Discover, explore, and download top Android applications and games directly from Nuratix Store."
+  "description": "Discover, explore, and download top Android applications and games directly from mystore."
 }
 </script>
 <style>
@@ -1190,21 +1190,23 @@ async function fetchWithTimeout(url, opts={}, ms=4000){
 
 async function api(p){
   const u = API + p;
-  // 1. Direct fetch with 3.5s timeout
+  // 1. Direct fetch with 4.5s timeout
   try{
-    const r = await fetchWithTimeout(u, {}, 3500);
+    const r = await fetchWithTimeout(u, { mode: 'cors' }, 4500);
     if(r.ok) return await r.json();
   }catch(_){}
 
-  // 2. Local proxy with 4s timeout
-  try{
-    const r = await fetchWithTimeout('/proxy?url=' + encodeURIComponent(u), {}, 4000);
-    if(r.ok) return await r.json();
-  }catch(_){}
+  // 2. Local proxy with 4s timeout (when running with local Python server)
+  if(location.protocol.startsWith('http') && !location.hostname.includes('androidplatform.net')){
+    try{
+      const r = await fetchWithTimeout('/proxy?url=' + encodeURIComponent(u), {}, 4000);
+      if(r.ok) return await r.json();
+    }catch(_){}
+  }
 
-  // 3. Fallback CORS proxy with 4.5s timeout
-  const r = await fetchWithTimeout('https://corsproxy.io/?url=' + encodeURIComponent(u), {}, 4500);
-  if(!r.ok) throw Error('HTTP ' + r.status);
+  // 3. Fallback direct fetch without timeout wrapper
+  const r = await fetch(u);
+  if(!r.ok) throw Error('Network error: ' + r.status);
   return r.json();
 }
 

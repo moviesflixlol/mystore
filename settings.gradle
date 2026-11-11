@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "NuratixStore"
+rootProject.name = "mystore"
 include ':app'
