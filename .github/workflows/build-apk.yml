@@ -1,0 +1,59 @@
+name: Build Nuratix Store APK
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build & Release Android APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Make Gradlew Executable
+        run: chmod +x gradlew
+
+      - name: Build Release APK
+        run: ./gradlew assembleRelease --stacktrace
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Nuratix-Store-APK
+          path: app/build/outputs/apk/release/*.apk
+          retention-days: 30
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/heads/main') || github.event_name == 'workflow_dispatch'
+        with:
+          tag_name: v1.0.0
+          name: Nuratix Store v1.0.0 (Official Release)
+          body: |
+            ## Nuratix Store — Android App Store (Release v1.0.0)
+
+            - **Lightweight APK** (~2.5 MB)
+            - **Native Android System WebView** (No bundled 300MB Chromium engine)
+            - **Zero Emojis**: Clean SVG vector icons only
+            - **Split APK & Package Installer Support**: Circular progress download bar and native installer handoff
+            - **Automated Update Manager**: In-app package tracking & update checks
+
+            Download the attached APK below and install it directly on any Android device.
+          files: app/build/outputs/apk/release/*.apk

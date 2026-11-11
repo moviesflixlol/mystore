@@ -1,0 +1,2727 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0a">
+<title>Nuratix Store</title>
+<meta name="description" content="Discover, explore, and download top Android applications and games directly from Nuratix Store.">
+
+<!-- Search Engine & App Icons -->
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/icon-192.png">
+<link rel="manifest" href="/manifest.json">
+
+<!-- OpenGraph / Social Search Previews -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Nuratix Store">
+<meta property="og:title" content="Nuratix Store — Android App Store">
+<meta property="og:description" content="Discover, explore, and download top Android applications and games directly from Nuratix Store.">
+<meta property="og:image" content="/icon-512.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="512">
+<meta property="og:image:height" content="512">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Nuratix Store">
+<meta name="twitter:description" content="Discover, explore, and download top Android applications and games directly from Nuratix Store.">
+<meta name="twitter:image" content="/icon-512.png">
+
+<!-- Google Search Structured Data (Rich App Result) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Nuratix Store",
+  "applicationCategory": "Application",
+  "operatingSystem": "Android",
+  "image": "/icon-512.png",
+  "logo": "/header-logo-tight.png",
+  "description": "Discover, explore, and download top Android applications and games directly from Nuratix Store."
+}
+</script>
+<style>
+:root{
+  --bg:#0a0a0a;
+  --card:#151515;
+  --card-hover:#1c1c1c;
+  --pill:#1f1f1f;
+  --line:#242424;
+  --red:#e50914;
+  --red-glow:rgba(229,9,20,0.35);
+  --mu:#9a9a9a;
+  --star:#ffb400;
+  --glass:rgba(18,18,18,0.82);
+  --glass-border:rgba(255,255,255,0.12);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{overscroll-behavior-x:none}
+body{
+  margin:0;
+  background:var(--bg);
+  color:#fff;
+  font-family:Roboto,-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",system-ui,sans-serif;
+  padding-bottom:120px;
+  overflow-x:hidden;
+}
+button{font:inherit;color:inherit;cursor:pointer;border:0}
+button:focus-visible,input:focus-visible{outline:2px solid #fff;outline-offset:2px}
+
+/* Modern Frosted Action Buttons */
+.action-btn{
+  position:fixed;
+  z-index:35;
+  top:calc(12px + env(safe-area-inset-top,0px));
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  border:1px solid var(--glass-border);
+  background:var(--glass);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 6px 20px rgba(0,0,0,0.55);
+  transition:transform 0.15s cubic-bezier(0.2,0,0,1),background 0.2s,box-shadow 0.2s;
+}
+.action-btn:active{
+  transform:scale(0.92);
+  background:rgba(229,9,20,0.3);
+  box-shadow:0 2px 10px var(--red-glow);
+}
+.action-btn.back-btn{left:14px}
+.action-btn.share-btn{right:14px}
+
+/* Top Home Floating Bar */
+header.home-bar{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  z-index:25;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:calc(12px + env(safe-area-inset-top,0px)) 16px 12px;
+  background:linear-gradient(to bottom,rgba(0,0,0,0.85) 0%,rgba(0,0,0,0.4) 60%,transparent 100%);
+  pointer-events:none;
+}
+header.home-bar > *{pointer-events:auto}
+.logo{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  user-select:none;
+  filter:drop-shadow(0 2px 8px rgba(229,9,20,0.45));
+  transition:transform 0.18s ease;
+}
+.logo:active{
+  transform:scale(0.92);
+}
+.logo img{
+  height:42px;
+  width:auto;
+  max-width:48px;
+  object-fit:contain;
+  display:block;
+}
+.search-trigger{
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  border:1px solid var(--glass-border);
+  background:var(--glass);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 6px 20px rgba(0,0,0,0.5);
+  transition:transform 0.15s,box-shadow 0.2s,background 0.2s;
+}
+.search-trigger:active{
+  transform:scale(0.92);
+  background:rgba(229,9,20,0.25);
+}
+
+/* Pure Cinematic Hero Carousel: Real Company Image + Smoke (No text) */
+.hero{
+  position:relative;
+  aspect-ratio:16/10;
+  max-height:460px;
+  width:100%;
+  overflow:hidden;
+  background:#111;
+  cursor:pointer;
+}
+.hero .gfx{
+  position:absolute;
+  inset:0;
+  background-size:cover;
+  background-position:center top;
+  transition:transform 0.5s cubic-bezier(0.2,0,0,1);
+}
+.hero:active .gfx{
+  transform:scale(1.02);
+}
+
+/* Atmospheric Smoke Effect */
+.smoke-overlay{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(
+    to bottom,
+    rgba(10,10,10,0.06) 0%,
+    transparent 15%,
+    rgba(10,10,10,0.05) 30%,
+    rgba(10,10,10,0.3) 55%,
+    rgba(10,10,10,0.65) 75%,
+    rgba(10,10,10,0.92) 90%,
+    var(--bg) 100%
+  );
+}
+.smoke-layer{
+  position:absolute;
+  left:-10%;
+  right:-10%;
+  bottom:0;
+  height:180px;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse 130% 75% at 50% 100%,rgba(14,14,14,0.98) 0%,rgba(10,10,10,0.85) 45%,transparent 100%),
+    radial-gradient(ellipse 90% 60% at 20% 95%,rgba(35,35,35,0.7) 0%,transparent 70%),
+    radial-gradient(ellipse 90% 60% at 80% 95%,rgba(35,35,35,0.7) 0%,transparent 70%);
+  filter:blur(14px);
+  opacity:0.95;
+}
+.smoke-drift{
+  position:absolute;
+  left:-20%;
+  right:-20%;
+  bottom:-15px;
+  height:140px;
+  background:
+    radial-gradient(ellipse at 35% 65%,rgba(255,255,255,0.08) 0%,transparent 55%),
+    radial-gradient(ellipse at 70% 75%,rgba(255,255,255,0.05) 0%,transparent 60%),
+    radial-gradient(ellipse at 50% 90%,rgba(255,255,255,0.04) 0%,transparent 50%);
+  filter:blur(20px);
+  animation:smokeDrift 14s ease-in-out infinite alternate;
+  pointer-events:none;
+}
+@keyframes smokeDrift{
+  0%{transform:translateX(-2%) scaleY(1);opacity:0.65}
+  50%{transform:translateX(3%) scaleY(1.18);opacity:0.9}
+  100%{transform:translateX(-1%) scaleY(1);opacity:0.65}
+}
+
+.dots{display:flex;gap:6px;justify-content:center;margin:12px 0 6px}
+.dots i{
+  width:8px;
+  height:6px;
+  border-radius:9px;
+  background:#3a3a3a;
+  transition:width 0.3s,background 0.3s;
+}
+.dots i.on{width:36px;background:var(--red)}
+
+/* Modern Google Play Style App Feed Layout */
+.scroll{
+  display:flex;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  scrollbar-width:none;
+  gap:14px;
+  padding:0 16px;
+  scroll-padding:0 16px;
+}
+.scroll::-webkit-scrollbar{display:none}
+.scroll>*{scroll-snap-align:start;flex:none}
+
+.chips{gap:10px;padding:14px 16px 4px}
+.chip{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:#181818;
+  border:1px solid #2b1a1c;
+  border-radius:99px;
+  padding:12px 20px;
+  font-weight:600;
+  font-size:15px;
+  color:#fff;
+  cursor:pointer;
+  transition:background 0.2s,border-color 0.2s,transform 0.15s;
+}
+.chip:active{background:var(--red);border-color:var(--red);transform:scale(0.96)}
+.chip svg{width:20px;height:20px;stroke:var(--red);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:stroke 0.2s}
+.chip:active svg{stroke:#fff}
+
+.sec{margin-top:28px}
+.sh{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 16px;margin-bottom:14px}
+.sh h2{margin:0;font-size:22px;font-weight:700;line-height:1.25;letter-spacing:-0.3px}
+.arr{
+  flex:none;
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  background:var(--pill);
+  border:1px solid #2a2a2a;
+  font-size:20px;
+  color:#fff;
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+  transition:background 0.15s,transform 0.15s;
+}
+.arr:active{background:var(--red);transform:scale(0.92)}
+
+.tile{
+  display:grid;
+  place-items:center;
+  font-weight:800;
+  color:#fff;
+  flex:none;
+  text-shadow:0 2px 8px #0005;
+  background:#1a1a1a;
+  overflow:hidden;
+  position:relative;
+}
+.tile img{width:100%;height:100%;object-fit:cover;border-radius:inherit}
+
+.big{width:145px;cursor:pointer;transition:transform 0.15s}
+.big:active{transform:scale(0.96)}
+.big .tile{width:145px;height:145px;border-radius:32px;border:1px solid rgba(255,255,255,0.06);background:#161616}
+.big b{
+  display:block;
+  margin-top:9px;
+  font-size:14.5px;
+  font-weight:600;
+  line-height:1.3;
+  min-height:38px;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+.rate{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  background:var(--pill);
+  border-radius:99px;
+  padding:4px 11px;
+  font-size:12.5px;
+  color:#ddd;
+  white-space:nowrap;
+}
+
+.page{width:calc(100vw - 52px);max-width:420px;display:flex;flex-direction:column;gap:16px}
+.item{display:flex;gap:14px;align-items:center;cursor:pointer;padding:4px 0;transition:opacity 0.15s}
+.item:active{opacity:0.85}
+.item .tile{width:68px;height:68px;border-radius:18px;border:1px solid rgba(255,255,255,0.06);background:#161616}
+.item .t{flex:1;min-width:0}
+.item b{display:block;font-size:16px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item p{
+  margin:2px 0 6px;
+  font-size:13px;
+  color:var(--mu);
+  line-height:1.35;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+.tags{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:12.5px;color:var(--mu)}
+.badge{display:inline-flex;gap:4px;align-items:center;background:#2a1012;color:#ff6b73;border-radius:99px;padding:3px 10px;font-size:12px;font-weight:600}
+
+.ev{
+  width:calc(100vw - 52px);
+  max-width:420px;
+  background:var(--card);
+  border-radius:26px;
+  overflow:hidden;
+  border:1px solid #222;
+  cursor:pointer;
+  transition:transform 0.15s;
+}
+.ev:active{transform:scale(0.98)}
+.ev .img{
+  position:relative;
+  height:170px;
+  background-size:cover;
+  background-position:center;
+  display:flex;
+  align-items:flex-end;
+  padding:14px 16px;
+  font-size:18px;
+  font-weight:700;
+  line-height:1.2;
+}
+.ev .img::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 25%,rgba(0,0,0,0.85))}
+.ev .img span{position:relative;z-index:1;text-shadow:0 2px 10px rgba(0,0,0,0.8)}
+.ai{
+  position:absolute;
+  z-index:2;
+  top:12px;
+  right:12px;
+  background:rgba(0,0,0,0.75);
+  border-radius:99px;
+  padding:5px 12px;
+  font-size:12px;
+  font-weight:700;
+  color:#fff;
+  backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,0.15);
+}
+.ev .row{display:flex;gap:12px;align-items:center;padding:14px}
+.ev .row .tile{width:56px;height:56px;border-radius:15px;background:#181818}
+.ev .row .t{flex:1;min-width:0}
+.ev .row b{display:block;font-size:15.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ev .row small{display:block;color:var(--mu);margin:2px 0 0;font-size:13px}
+.inst-col{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;color:var(--mu)}
+.split{display:flex;gap:2px}
+.split button{background:var(--red);height:40px;font-weight:700;border:0;color:#fff;transition:opacity 0.15s;display:flex;align-items:center;justify-content:center;}
+.split button:active{opacity:0.85}
+.split button:first-child{border-radius:99px 0 0 99px;padding:0 18px;font-size:13.5px}
+.split button:last-child{border-radius:0 99px 99px 0;padding:0 12px;}
+
+.box{margin:32px 0 0;background:var(--card);border-radius:32px 32px 0 0;padding:22px 0 26px;border-top:1px solid #222}
+.box .hd{display:flex;gap:12px;align-items:center;padding:0 16px 16px}
+.box .hd .tile{width:46px;height:46px;border-radius:14px;background:var(--red);box-shadow:0 4px 14px var(--red-glow)}
+.box h2{margin:0;font-size:21px;font-weight:700}.box small{color:var(--mu);font-size:13.5px}
+.post{
+  width:170px;
+  background:#1c1c1c;
+  border-radius:20px;
+  overflow:hidden;
+  flex:none;
+  cursor:pointer;
+  border:1px solid #262626;
+  transition:transform 0.15s;
+}
+.post:active{transform:scale(0.96)}
+.post .img{height:170px;background-size:cover;background-position:center;background-color:#222}
+.post p{
+  margin:10px 12px 6px;
+  font-size:14.5px;
+  font-weight:600;
+  line-height:1.3;
+  min-height:38px;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+.post div:last-child{padding:0 12px 12px;font-size:12.5px;color:var(--mu);display:flex;flex-direction:column;gap:3px}
+
+/* List Tile (All apps) */
+.h{margin:0;font-size:22px;font-weight:700;padding:24px 16px 8px;letter-spacing:-0.3px}
+.li{display:flex;gap:14px;align-items:center;padding:12px 16px;border-radius:16px;transition:background 0.15s}
+.li:active{background:var(--card)}
+.li img{width:64px;height:64px;border-radius:18px;background:#222;flex:none;border:1px solid rgba(255,255,255,0.08);object-fit:cover;}
+.li .m{flex:1;min-width:0;cursor:pointer}
+.li .m b{display:block;font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.li .m span{display:block;font-size:13px;color:var(--mu);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dev-link{
+  color:var(--red)!important;
+  font-weight:600;
+  cursor:pointer;
+  transition:opacity 0.15s;
+}
+.dev-link:hover{text-decoration:underline;opacity:0.85}
+.get{
+  background:#1e1e1e;
+  color:var(--red);
+  border:1px solid rgba(229,9,20,0.3);
+  border-radius:99px;
+  padding:9px 20px;
+  font-weight:700;
+  font-size:13.5px;
+  transition:transform 0.15s,background 0.2s;
+  flex:none;
+}
+.get:active{transform:scale(0.93);background:var(--red);color:#fff}
+.st{text-align:center;color:var(--mu);padding:26px 16px;line-height:1.5;font-size:14px}
+
+/* Bottom Nav */
+nav{
+  position:fixed;
+  z-index:30;
+  left:50%;
+  transform:translateX(-50%);
+  bottom:calc(14px + env(safe-area-inset-bottom,0px));
+  display:flex;
+  gap:4px;
+  padding:6px;
+  background:rgba(18,18,18,0.88);
+  border:1px solid var(--glass-border);
+  border-radius:99px;
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  box-shadow:0 10px 30px rgba(0,0,0,0.7);
+}
+nav button{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  background:none;
+  border:0;
+  border-radius:99px;
+  padding:11px 22px;
+  color:var(--mu);
+  font-weight:700;
+  font-size:13.5px;
+  transition:background 0.2s,color 0.2s;
+}
+nav button.on{
+  background:var(--red);
+  color:#fff;
+  box-shadow:0 3px 12px var(--red-glow);
+}
+nav svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+
+/* Fullscreen Views: Search, Details, Developer */
+.fullscreen-view{
+  position:fixed;
+  inset:0;
+  z-index:40;
+  background:var(--bg);
+  overflow-y:auto;
+  transform:translateY(100%);
+  transition:transform 0.28s cubic-bezier(0.16,1,0.3,1);
+  visibility:hidden;
+  padding-bottom:50px;
+}
+.fullscreen-view.open{
+  transform:none;
+  visibility:visible;
+}
+
+/* 16:9 Banner Hero (Used in App Details and Developer Page) */
+.dtop{
+  position:relative;
+  aspect-ratio:16/9;
+  max-height:340px;
+  width:100%;
+  background:#141414;
+  overflow:hidden;
+}
+.dtop .bg{
+  position:absolute;
+  inset:0;
+  background-size:cover;
+  background-position:center;
+  transition:transform 0.4s ease;
+}
+.dh{
+  display:flex;
+  gap:18px;
+  padding:0 20px;
+  margin-top:-44px;
+  position:relative;
+  z-index:15;
+  align-items:flex-end;
+}
+.dh img{
+  width:92px;
+  height:92px;
+  border-radius:24px;
+  background:#222;
+  border:3px solid var(--bg);
+  box-shadow:0 8px 24px rgba(0,0,0,0.7);
+  object-fit:cover;
+}
+.dh h1{margin:0 0 3px;font-size:23px;font-weight:800;letter-spacing:-0.4px}
+.dh p{margin:0 0 6px;color:var(--red);font-weight:700;font-size:15px}
+.stats{display:flex;padding:22px 10px;text-align:center;border-bottom:1px solid var(--line)}
+.stats div{flex:1;border-right:1px solid var(--line)}
+.stats div:last-child{border:0}
+.stats b{display:block;font-size:18px;font-weight:800}
+.stats span{font-size:12.5px;color:var(--mu);margin-top:2px;display:block}
+.inst{display:flex;gap:12px;margin:18px 20px 0}
+.inst button.install-btn{
+  flex:1;
+  text-align:center;
+  background:var(--red);
+  border-radius:99px;
+  padding:15px;
+  font-size:16px;
+  font-weight:800;
+  color:#fff;
+  border:0;
+  box-shadow:0 6px 20px var(--red-glow);
+  transition:transform 0.15s;
+}
+.inst button.install-btn:active{transform:scale(0.97)}
+.inst button.fav-btn{
+  width:54px;
+  border:1px solid var(--line);
+  border-radius:50%;
+  background:var(--card);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:transform 0.15s,border 0.2s;
+}
+.inst button.fav-btn:active{transform:scale(0.92)}
+.shots{display:flex;gap:12px;overflow-x:auto;padding:22px 20px 0}
+.shots img{height:250px;border-radius:16px;flex:none;background:#181818;border:1px solid rgba(255,255,255,0.06)}
+.about{padding:0 20px;color:#cfcfcf;line-height:1.65;white-space:pre-line;font-size:14.5px}
+.pad{padding:0 20px}
+.det-big{display:flex;gap:24px;align-items:center;padding:0 20px}
+.det-big strong{font-size:54px;font-weight:700;line-height:1}
+.bars{flex:1}
+.bars div{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--mu);margin:4px 0}
+.bars u{flex:1;height:7px;border-radius:9px;background:#222;overflow:hidden;text-decoration:none}
+.bars u i{display:block;height:100%;background:var(--red);border-radius:9px}
+.badge.trusted{
+  background:rgba(46,125,50,0.18);
+  border-color:rgba(76,175,80,0.4);
+  color:#81c784;
+}
+
+/* Dedicated Developer Page */
+.dev-avatar{
+  width:84px;
+  height:84px;
+  border-radius:22px;
+  background:#181818;
+  border:2.5px solid var(--bg);
+  box-shadow:0 10px 28px rgba(0,0,0,0.7);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:36px;
+  font-weight:900;
+  color:#fff;
+  flex:none;
+  overflow:hidden;
+}
+
+/* Modern Mobile-Friendly Search Page (No Emojis - Vector Icons Only) */
+.search-header{
+  position:sticky;
+  top:0;
+  z-index:10;
+  display:flex;
+  gap:12px;
+  align-items:center;
+  padding:calc(12px + env(safe-area-inset-top,0px)) 16px 14px;
+  background:rgba(10,10,10,0.92);
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--line);
+}
+.search-input-wrap{
+  flex:1;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:#181818;
+  border:1px solid #282828;
+  border-radius:99px;
+  padding:0 16px;
+  height:48px;
+  box-shadow:inset 0 1px 4px rgba(0,0,0,0.5);
+  transition:border-color 0.2s,box-shadow 0.2s;
+}
+.search-input-wrap:focus-within{
+  border-color:var(--red);
+  box-shadow:0 0 14px var(--red-glow);
+}
+.search-input-wrap input{
+  flex:1;
+  min-width:0;
+  background:none;
+  border:0;
+  outline:0;
+  color:#fff;
+  font-size:16px;
+}
+.search-clear{
+  background:#262626;
+  border:0;
+  color:#bbb;
+  width:26px;
+  height:26px;
+  border-radius:50%;
+  display:none;
+  place-items:center;
+}
+.search-clear.show{display:grid}
+
+/* Search Discover Hub (Clean Vector Icons) */
+.search-discover{padding:14px 16px 30px}
+.search-sec-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  font-size:15px;
+  font-weight:700;
+  color:#fff;
+  margin:20px 0 12px;
+  letter-spacing:-0.2px;
+}
+.search-sec-title button{
+  background:none;
+  color:var(--red);
+  font-size:12.5px;
+  font-weight:600;
+}
+.quick-chips{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding:2px 0 8px;
+  scrollbar-width:none;
+}
+.quick-chips::-webkit-scrollbar{display:none}
+.quick-chip{
+  flex:none;
+  background:#181818;
+  border:1px solid #282828;
+  border-radius:99px;
+  padding:9px 18px;
+  font-weight:600;
+  font-size:13.5px;
+  color:#ccc;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  transition:background 0.2s,border-color 0.2s,color 0.2s,transform 0.15s;
+}
+.quick-chip:active{background:var(--red);border-color:var(--red);color:#fff;transform:scale(0.96)}
+
+.search-cat-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+.search-cat-card{
+  background:#151515;
+  border:1px solid #242424;
+  border-radius:18px;
+  padding:14px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  cursor:pointer;
+  transition:background 0.15s,transform 0.15s,border-color 0.15s;
+}
+.search-cat-card:active{
+  background:#202020;
+  border-color:var(--red);
+  transform:scale(0.97);
+}
+.search-cat-icon{
+  width:42px;
+  height:42px;
+  border-radius:14px;
+  background:#202020;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:none;
+  border:1px solid rgba(255,255,255,0.06);
+  color:var(--red);
+}
+.search-cat-info b{display:block;font-size:14px;font-weight:600;}
+.search-cat-info span{display:block;font-size:11.5px;color:var(--mu);margin-top:2px;}
+
+.recent-list{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+.recent-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  background:#181818;
+  border:1px solid var(--line);
+  border-radius:99px;
+  padding:7px 14px;
+  font-size:13px;
+  color:#ddd;
+  cursor:pointer;
+}
+.recent-chip:active{background:var(--card-hover)}
+.recent-chip .del{color:var(--mu);padding-left:4px;display:flex;align-items:center;cursor:pointer}
+
+/* Toast */
+#toast{
+  position:fixed;
+  bottom:88px;
+  left:50%;
+  transform:translateX(-50%) translateY(100px);
+  background:rgba(28,28,28,0.95);
+  border:1px solid var(--glass-border);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  color:#fff;
+  padding:12px 24px;
+  border-radius:99px;
+  font-size:13.5px;
+  font-weight:600;
+  z-index:60;
+  transition:transform 0.3s cubic-bezier(0.16,1,0.3,1),opacity 0.3s;
+  opacity:0;
+  pointer-events:none;
+  box-shadow:0 10px 30px rgba(0,0,0,0.8);
+  white-space:nowrap;
+}
+#toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+.skel{background:linear-gradient(90deg,#141414,#222,#141414);background-size:200% 100%;animation:sk 1.2s infinite}
+@keyframes sk{to{background-position:-200% 0}}
+/* Circular Download Progress Bar */
+.dl-circle-wrap{
+  position:relative;
+  width:34px;
+  height:34px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  flex:none;
+}
+.dl-circle-svg{
+  width:34px;
+  height:34px;
+  transform:rotate(-90deg);
+}
+.dl-circle-bg{
+  fill:none;
+  stroke:rgba(255,255,255,0.15);
+  stroke-width:3.2;
+}
+.dl-circle-fill{
+  fill:none;
+  stroke:var(--red);
+  stroke-width:3.6;
+  stroke-linecap:round;
+  transition:stroke-dasharray 0.18s ease;
+}
+.dl-circle-text{
+  position:absolute;
+  font-size:9.5px;
+  font-weight:800;
+  color:#fff;
+  letter-spacing:-0.5px;
+}
+button.get.downloading, button.install-btn.downloading{
+  background:#181818 !important;
+  border:1px solid #333 !important;
+  color:#fff !important;
+  box-shadow:none !important;
+  padding:4px 12px !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:8px !important;
+  pointer-events:none;
+}
+button.get.installed, button.install-btn.installed{
+  background:#142c19 !important;
+  color:#81c784 !important;
+  border:1px solid #2e7d32 !important;
+}
+
+/* Me Section & Updates Cards */
+.me-card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:24px;
+  padding:18px 20px;
+  margin:14px 16px;
+  display:flex;
+  gap:16px;
+  align-items:center;
+}
+.me-avatar{
+  width:58px;
+  height:58px;
+  border-radius:18px;
+  background:#1a1a1a;
+  border:1px solid #333;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  flex:none;
+}
+.me-avatar img{width:38px;height:38px;object-fit:contain}
+.me-info{flex:1;min-width:0}
+.me-info h3{margin:0;font-size:18px;font-weight:700}
+.me-info p{margin:3px 0 0;font-size:13px;color:var(--mu)}
+
+.sec-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 20px;
+  margin:28px 0 12px;
+}
+.sec-head h2{margin:0;font-size:20px;font-weight:700}
+.btn-refresh-updates{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  background:#1c1c1c;
+  border:1px solid var(--line);
+  border-radius:99px;
+  padding:6px 14px;
+  font-size:13px;
+  font-weight:600;
+  color:var(--mu);
+}
+.btn-refresh-updates:active{transform:scale(0.95);color:#fff}
+
+.update-card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:14px 16px;
+  margin:10px 16px;
+  display:flex;
+  gap:14px;
+  align-items:center;
+  transition:border-color 0.2s;
+}
+.update-card:hover{border-color:#333}
+.update-icon{
+  width:56px;
+  height:56px;
+  border-radius:14px;
+  object-fit:cover;
+  background:#181818;
+  flex:none;
+}
+.update-info{flex:1;min-width:0}
+.update-info b{display:block;font-size:15.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.update-badge{
+  display:inline-block;
+  background:rgba(255,180,0,0.15);
+  color:#ffb400;
+  border:1px solid rgba(255,180,0,0.3);
+  border-radius:6px;
+  padding:2px 8px;
+  font-size:11.5px;
+  font-weight:700;
+  margin:4px 0;
+}
+.update-sub{
+  display:block;
+  font-size:12px;
+  color:var(--mu);
+}
+.uptodate-card{
+  background:rgba(37,211,102,0.08);
+  border:1px solid rgba(37,211,102,0.25);
+  border-radius:20px;
+  padding:16px 20px;
+  margin:10px 16px;
+  display:flex;
+  gap:14px;
+  align-items:center;
+  color:#fff;
+}
+.pkg-tag{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  background:#242424;
+  border-radius:4px;
+  padding:1px 6px;
+  font-size:11px;
+  color:#81c784;
+}
+
+@media(min-width:760px){main,header.home-bar,.fullscreen-view .content-wrap{max-width:1000px;margin-inline:auto}}
+</style>
+</head>
+<body>
+
+<!-- Home Transparent Bar: Just Red Logo and Modern Search Button -->
+<header class="home-bar" id="home-bar">
+  <div class="logo" id="logo" role="button" aria-label="Nuratix Store Home">
+    <img src="/header-logo-tight.png" alt="Nuratix Store" width="42" height="42">
+  </div>
+  <button class="search-trigger" id="btn-open-search" aria-label="Search">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8"/>
+      <path d="m21 21-4.35-4.35"/>
+    </svg>
+  </button>
+</header>
+
+<main id="main"></main>
+
+<!-- Bottom Nav -->
+<nav>
+  <button data-nav="0" class="on">
+    <svg viewBox="0 0 24 24"><path d="M3 11 12 3l9 8v10h-6v-6H9v6H3z"/></svg>Home
+  </button>
+  <button data-nav="1">
+    <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="11" rx="5"/><path d="M7 10v5M4.5 12.5h5M16 11h.01M18.5 14h.01"/></svg>Games
+  </button>
+  <button data-nav="2">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg>Me
+  </button>
+</nav>
+
+<!-- Fullscreen Search Page (Modern, Mobile-Friendly, Vector Icons Only) -->
+<div id="search-view" class="fullscreen-view" role="dialog" aria-modal="true">
+  <div class="search-header">
+    <button class="action-btn back-btn" style="position:static;" id="search-back" aria-label="Back">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M15 18l-6-6 6-6"/>
+      </svg>
+    </button>
+    <div class="search-input-wrap">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e50914" stroke-width="2.3" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+      <input id="search-input" placeholder="Search apps, games, developers..." aria-label="Search" autocomplete="off">
+      <button class="search-clear" id="search-clear" aria-label="Clear">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Discover Hub (Visible when input is empty - No Emojis, Pure SVG Icons) -->
+  <div id="search-discover" class="search-discover">
+    <div id="recent-search-wrap" hidden>
+      <div class="search-sec-title">
+        <span>Recent Searches</span>
+        <button id="btn-clear-history">Clear all</button>
+      </div>
+      <div class="recent-list" id="recent-search-list"></div>
+    </div>
+
+    <div class="search-sec-title">
+      <span style="display:flex;align-items:center;gap:7px;">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>
+        </svg>
+        Trending Searches
+      </span>
+    </div>
+    <div class="quick-chips">
+      <button class="quick-chip" data-query="Free Fire">Free Fire</button>
+      <button class="quick-chip" data-query="ChatGPT">ChatGPT</button>
+      <button class="quick-chip" data-query="Grok">Grok</button>
+      <button class="quick-chip" data-query="Roblox">Roblox</button>
+      <button class="quick-chip" data-query="Minecraft">Minecraft</button>
+      <button class="quick-chip" data-query="WhatsApp">WhatsApp</button>
+      <button class="quick-chip" data-query="Spotify">Spotify</button>
+      <button class="quick-chip" data-query="Subway Surfers">Subway Surfers</button>
+      <button class="quick-chip" data-query="Telegram">Telegram</button>
+      <button class="quick-chip" data-query="Microsoft Corporation">Microsoft</button>
+    </div>
+
+    <div class="search-sec-title" style="margin-top:24px;">
+      <span style="display:flex;align-items:center;gap:7px;">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/>
+          <rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/>
+        </svg>
+        Browse Categories
+      </span>
+    </div>
+    <div class="search-cat-grid">
+      <div class="search-cat-card" data-query="games action arcade">
+        <div class="search-cat-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="4"/><path d="M6 12h4m-2-2v4m9-3h.01M17 13h.01"/></svg>
+        </div>
+        <div class="search-cat-info">
+          <b>Games &amp; Arcade</b>
+          <span>Action, Shooter, RPG</span>
+        </div>
+      </div>
+      <div class="search-cat-card" data-query="chatgpt grok ai assistant">
+        <div class="search-cat-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/><rect x="4" y="8" width="16" height="12" rx="4"/><path d="M9 13v2m6-2v2"/></svg>
+        </div>
+        <div class="search-cat-info">
+          <b>AI Assistants</b>
+          <span>ChatGPT, Grok, Copilot</span>
+        </div>
+      </div>
+      <div class="search-cat-card" data-query="music streaming audio">
+        <div class="search-cat-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        </div>
+        <div class="search-cat-info">
+          <b>Music &amp; Audio</b>
+          <span>Songs, Beats, Podcasts</span>
+        </div>
+      </div>
+      <div class="search-cat-card" data-query="social chat messaging">
+        <div class="search-cat-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div class="search-cat-info">
+          <b>Social &amp; Chat</b>
+          <span>Messenger, Connect</span>
+        </div>
+      </div>
+      <div class="search-cat-card" data-query="productivity office tools">
+        <div class="search-cat-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
+        <div class="search-cat-info">
+          <b>Productivity</b>
+          <span>Office, Notes, Scanner</span>
+        </div>
+      </div>
+      <div class="search-cat-card" data-query="photo video editor">
+        <div class="search-cat-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        </div>
+        <div class="search-cat-info">
+          <b>Photo &amp; Video</b>
+          <span>Filters, AI Edits</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="search-results"></div>
+  <p class="st" id="search-status" hidden></p>
+</div>
+
+<!-- Fullscreen Developer Page (/dev/:name) with Real 16:9 Banner -->
+<div id="dev-view" class="fullscreen-view" role="dialog" aria-modal="true">
+  <button class="action-btn back-btn" id="dev-back" aria-label="Back">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15 18l-6-6 6-6"/>
+    </svg>
+  </button>
+  <button class="action-btn share-btn" id="dev-share" aria-label="Share">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+      <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+    </svg>
+  </button>
+
+  <!-- 16:9 Hero Graphic Banner with Atmospheric Smoke Overlay -->
+  <div class="dtop" id="dev-hero">
+    <div class="bg" id="dev-hero-bg"></div>
+    <div class="smoke-overlay"></div>
+    <div class="smoke-layer"></div>
+    <div class="smoke-drift"></div>
+  </div>
+
+  <div class="dh">
+    <div class="dev-avatar" id="dev-avatar"></div>
+    <div style="flex:1; min-width:0;">
+      <h1 id="dev-title" style="font-size:23px; font-weight:800; margin:0 0 5px; letter-spacing:-0.3px;">Developer</h1>
+      <div style="display:flex; flex-wrap:wrap; gap:6px; align-items:center;">
+        <span class="badge trusted">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="display:inline-block; vertical-align:middle; margin-right:3px;"><polyline points="20 6 9 17 4 12"/></svg>Verified Publisher
+        </span>
+        <span class="badge" id="dev-count">Checking published apps...</span>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="h" style="padding-top:24px;">Official Applications</h2>
+  <div id="dev-list"></div>
+  <p class="st" id="dev-status">Fetching published apps…</p>
+</div>
+
+<!-- Fullscreen App Details Page (/app/:id) -->
+<div id="det" class="fullscreen-view" role="dialog" aria-modal="true"></div>
+
+<!-- Toast notification -->
+<div id="toast"></div>
+
+<script>
+const API='https://ws75.aptoide.com/api/7';
+const $=s=>document.querySelector(s),main=$('#main'),det=$('#det'),searchView=$('#search-view'),devView=$('#dev-view');
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const https=u=>u?String(u).replace(/^http:/,'https:'):'';
+const fmtN=n=>n>=1e9?(n/1e9).toFixed(1)+'B':n>=1e6?(n/1e6).toFixed(1)+'M':n>=1e3?(n/1e3).toFixed(0)+'K':String(n||0);
+const fmtS=n=>n?(n/1048576).toFixed(0)+' MB':'—';
+
+/* Standard Vector Icons (Zero Emojis) */
+const icoStar = `<svg width="13" height="13" viewBox="0 0 24 24" fill="#ffb400" stroke="#ffb400" stroke-width="1.2" style="display:inline-block;vertical-align:-1px;margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
+const icoCheck = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-1px;margin-right:3px;"><polyline points="20 6 9 17 4 12"/></svg>`;
+const icoArrowRight = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>`;
+const icoChevronDown = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>`;
+const icoHeartOutline = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
+const icoHeartFilled = `<svg width="22" height="22" viewBox="0 0 24 24" fill="var(--red)" stroke="var(--red)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
+const icoClose = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+
+const rt = r => r ? `${icoStar} ${Number(r).toFixed(1)}` : `${icoStar} 4.5`;
+
+function toast(msg){
+  const t=$('#toast');t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2400);
+}
+
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+/* Fast-fail timeout wrapper to prevent fetch from ever getting stuck */
+async function fetchWithTimeout(url, opts={}, ms=4000){
+  const controller = new AbortController();
+  const id = setTimeout(()=>controller.abort(), ms);
+  try{
+    const res = await fetch(url, {...opts, signal: controller.signal});
+    clearTimeout(id);
+    return res;
+  }catch(err){
+    clearTimeout(id);
+    throw err;
+  }
+}
+
+async function api(p){
+  const u = API + p;
+  // 1. Direct fetch with 3.5s timeout
+  try{
+    const r = await fetchWithTimeout(u, {}, 3500);
+    if(r.ok) return await r.json();
+  }catch(_){}
+
+  // 2. Local proxy with 4s timeout
+  try{
+    const r = await fetchWithTimeout('/proxy?url=' + encodeURIComponent(u), {}, 4000);
+    if(r.ok) return await r.json();
+  }catch(_){}
+
+  // 3. Fallback CORS proxy with 4.5s timeout
+  const r = await fetchWithTimeout('https://corsproxy.io/?url=' + encodeURIComponent(u), {}, 4500);
+  if(!r.ok) throw Error('HTTP ' + r.status);
+  return r.json();
+}
+
+const cache={};
+function norm(a){
+  const o={
+    id:a.id,
+    name:a.name||a.package||'App',
+    pkg:a.package||'',
+    dev:a.developer?.name||a.store?.name||'',
+    icon:https(a.icon),
+    gfx:https(a.graphic),
+    rate:a.stats?.rating?.avg||4.5,
+    dl:a.stats?.downloads||0,
+    size:a.size||a.file?.filesize||0,
+    apk:https(a.file?.path||a.file?.path_alt),
+    ver:a.file?.vername||'1.0',
+    desc:a.media?.description||a.description||a.summary||''
+  };
+  cache[o.id]=o;
+  return o;
+}
+const list=async p=>((await api(p)).datalist?.list||[]).map(norm);
+// Pass aab=true to discover modern Android App Bundle packages
+const S=q=>`/apps/search/query=${encodeURIComponent(q.trim())}/limit=25/aab=true`;
+
+const wl={
+  get(){try{return JSON.parse(localStorage.getItem('wl')||'[]')}catch{return[]}},
+  has(id){return this.get().some(a=>a.id==id)},
+  toggle(id){let l=this.get();l=this.has(id)?l.filter(a=>a.id!=id):[cache[id]||{id},...l];try{localStorage.setItem('wl',JSON.stringify(l))}catch{}}
+};
+
+const searchHistory = {
+  get(){ try{ return JSON.parse(localStorage.getItem('search_hist') || '[]') }catch{ return [] } },
+  add(q){
+    q = (q||'').trim();
+    if(!q || q.length < 2) return;
+    let l = this.get().filter(x => x.toLowerCase() !== q.toLowerCase());
+    l.unshift(q);
+    if(l.length > 8) l = l.slice(0, 8);
+    try{ localStorage.setItem('search_hist', JSON.stringify(l)) }catch{}
+  },
+  remove(q){
+    let l = this.get().filter(x => x !== q);
+    try{ localStorage.setItem('search_hist', JSON.stringify(l)) }catch{}
+  },
+  clear(){
+    try{ localStorage.removeItem('search_hist') }catch{}
+  }
+};
+
+const setNav=n=>document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',+b.dataset.nav===n));
+const li=a=>`<div class="li"><img src="${esc(a.icon)}" alt="" loading="lazy" data-open="${a.id}"><div class="m" data-open="${a.id}"><b>${esc(a.name)}</b><span class="rt">${rt(a.rate)} · ${fmtS(a.size)}${a.dl?' · '+fmtN(a.dl):''}</span><span class="dev-link" data-dev="${esc(a.dev)}">${esc(a.dev)}</span></div><button class="get" data-get="${a.id}">Install</button></div>`;
+const fail=(el,e)=>{if(!el)return;el.hidden=false;el.className='st';el.innerHTML=`Couldn’t load data: ${esc(e.message||'network error')}`};
+
+/* Clean vector logos for major tech developers */
+function getDevBrandLogo(devName){
+  const d = (devName||'').toLowerCase();
+  if(d.includes('microsoft')){
+    return `<svg viewBox="0 0 24 24" width="46" height="46" style="display:block;">
+      <rect x="2" y="2" width="9.5" height="9.5" fill="#f25022"/>
+      <rect x="12.5" y="2" width="9.5" height="9.5" fill="#7fba00"/>
+      <rect x="2" y="12.5" width="9.5" height="9.5" fill="#00a4ef"/>
+      <rect x="12.5" y="12.5" width="9.5" height="9.5" fill="#ffb900"/>
+    </svg>`;
+  }
+  if(d.includes('google')){
+    return `<svg viewBox="0 0 24 24" width="46" height="46" style="display:block;">
+      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+      <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
+      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"/>
+    </svg>`;
+  }
+  if(d.includes('meta')||d.includes('facebook')){
+    return `<svg viewBox="0 0 24 24" width="46" height="46" fill="#0081fb"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.879V14.89h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.989C18.343 21.129 22 16.99 22 12c0-5.523-4.477-10-10-10z"/></svg>`;
+  }
+  if(d.includes('spotify')){
+    return `<svg viewBox="0 0 24 24" width="46" height="46" fill="#1db954"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.563.387-.857.207-2.348-1.435-5.304-1.76-8.785-.963-.335.077-.67-.133-.746-.468-.077-.334.132-.67.467-.746 3.808-.87 7.076-.5 9.714 1.114.294.18.386.563.207.856zm1.225-2.724c-.226.367-.706.482-1.072.257-2.687-1.652-6.785-2.131-9.965-1.166-.413.126-.848-.107-.973-.52-.125-.414.108-.849.52-.974 3.632-1.102 8.147-.568 11.233 1.332.366.226.482.707.257 1.071zm.105-2.835C14.692 8.95 9.375 8.775 6.297 9.71c-.493.15-1.016-.13-1.166-.624-.149-.494.13-1.017.625-1.167 3.532-1.073 9.404-.866 13.115 1.338.445.264.59.838.327 1.282-.264.443-.838.59-1.282.326z"/></svg>`;
+  }
+  if(d.includes('whatsapp')){
+    return `<svg viewBox="0 0 48 48" width="46" height="46" style="display:block;">
+      <circle cx="24" cy="24" r="23" fill="#25D366"/>
+      <path fill="#FFF" d="M34.8 28.5c-.5-.3-3.1-1.5-3.6-1.7-.5-.2-.9-.3-1.3.3s-1.5 1.9-1.8 2.3c-.3.4-.7.4-1.2.2-.5-.2-2.2-.8-4.2-2.6-1.6-1.4-2.6-3.1-2.9-3.7-.3-.5 0-.8.2-1 .2-.2.5-.5.7-.8.2-.3.3-.5.5-.8.1-.3.1-.6 0-.8s-1.3-3.2-1.8-4.3c-.5-1.1-1-1-1.3-1h-1.1c-.4 0-1 .1-1.6.7-.5.6-2.1 2-2.1 5s2.2 5.8 2.5 6.2c.3.4 4.3 6.6 10.4 9.2 1.5.6 2.6 1 3.5 1.3 1.5.5 2.8.4 3.9.3 1.2-.2 3.6-1.5 4.1-2.9.5-1.4.5-2.6.4-2.9-.2-.3-.6-.5-1.1-.8z"/>
+    </svg>`;
+  }
+  if(d.includes('telegram')){
+    return `<svg viewBox="0 0 24 24" width="46" height="46" fill="#24A1DE"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .36z"/></svg>`;
+  }
+  if(d.includes('netflix')){
+    return `<svg viewBox="0 0 24 24" width="46" height="46"><path fill="#e50914" d="M4 2h4.5l5.5 15.5V2H18v20h-4.5L8 6.5V22H4V2z"/></svg>`;
+  }
+  if(d.includes('garena')){
+    return `<svg viewBox="0 0 24 24" width="46" height="46"><circle cx="12" cy="12" r="10" fill="#ED1C24"/><path d="M8 8l8 4-8 4V8z" fill="#fff"/></svg>`;
+  }
+  return null;
+}
+
+/* Fallback vector icon for verified developers (Zero text letters) */
+function getDevDefaultLogo(){
+  return `<svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color:var(--mu);">
+    <rect x="4" y="2" width="16" height="20" rx="2" ry="2"/>
+    <line x1="9" y1="6" x2="9.01" y2="6"/>
+    <line x1="15" y1="6" x2="15.01" y2="6"/>
+    <line x1="9" y1="10" x2="9.01" y2="10"/>
+    <line x1="15" y1="10" x2="15.01" y2="10"/>
+    <line x1="9" y1="14" x2="9.01" y2="14"/>
+    <line x1="15" y1="14" x2="15.01" y2="14"/>
+    <line x1="9" y1="18" x2="15" y2="18"/>
+  </svg>`;
+}
+
+/* Smoke HTML template */
+const smokeHtml = `
+  <div class="smoke-overlay"></div>
+  <div class="smoke-layer"></div>
+  <div class="smoke-drift"></div>
+`;
+
+/* pages: 0 home, 1 games, 2 me */
+let page=0,H={items:[],k:0},timer,io;
+function go(p,dir,push=true){
+  p=Math.max(0,Math.min(2,p));
+  dir=dir??(p>page?'l':'r');page=p;setNav(p);
+  closeAllModals(false);
+  clearInterval(timer);io?.disconnect();window.scrollTo(0,0);
+  main.className='';void main.offsetWidth;main.className=dir;
+
+  // Toggle home top bar visibility
+  $('#home-bar').style.display = (p === 0 ? 'flex' : 'none');
+
+  if(push){
+    const path = p===1?'/games':(p===2?'/me':'/');
+    if(location.pathname!==path)history.pushState({page:p},'',path);
+  }
+  document.title = (p===1?'Games — Nuratix Store':(p===2?'My Profile — Nuratix Store':'Nuratix Store'));
+  [home,games,me][p]();
+}
+
+/* Infinite list handler */
+let L={base:'',off:0,busy:0,done:0};
+function startList(base){
+  L={base,off:0,busy:0,done:0};
+  io?.disconnect();
+  io=new IntersectionObserver(e=>{if(e.some(x=>x.isIntersecting))more()},{rootMargin:'800px'});
+  const sen=$('#sen');if(sen)io.observe(sen);
+  more();
+}
+async function more(){
+  if(L.busy||L.done)return;
+  L.busy=1;
+  const st=$('#st');
+  if(st){st.hidden=false;st.className='st';st.textContent='Loading more apps…';}
+  try{
+    const it=await list(`${L.base}/limit=24/offset=${L.off}`);
+    L.off+=it.length;
+    $('#lst')?.insertAdjacentHTML('beforeend',it.map(li).join(''));
+    if(it.length<24){L.done=1;io?.disconnect()}
+    if(st){
+      st.hidden=!!$('#lst')?.children.length;
+      if(!$('#lst')?.children.length)st.textContent='No apps found.';
+    }
+  }catch(e){
+    if(st)fail(st,e);
+    L.done=1;
+  }
+  L.busy=0;
+}
+function listView(title,base){
+  clearInterval(timer);window.scrollTo(0,0);
+  main.innerHTML=`<h2 class="h">${esc(title)}</h2><div id="lst"></div><p class="st" id="st"></p><div id="sen"></div>`;
+  startList(base);
+}
+
+/* Home Feed with Modern Google Play / App Store style sections */
+async function home(){
+  main.innerHTML=`
+    <div class="hero skel" id="hero"></div>
+    <div class="dots" id="dots"></div>
+
+    <!-- Category Chips Bar -->
+    <div class="scroll chips">
+      <button class="chip" data-chip="charts">
+        <svg viewBox="0 0 24 24"><path d="M4 20V10h4v10M10 20V4h4v16M16 20v-7h4v7"/></svg>Top charts
+      </button>
+      <button class="chip" data-chip="kids">
+        <svg viewBox="0 0 24 24"><path d="m12 3 2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.3 6.8 19l1-5.8L3.5 9.2l5.9-.9z"/></svg>Children
+      </button>
+      <button class="chip" data-chip="categories">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="3.5"/><rect x="3" y="14" width="7" height="7" rx="3.5"/><path d="M17.5 14v7M14 17.5h7"/></svg>Categories
+      </button>
+      <button class="chip" data-chip="games">
+        <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="11" rx="5"/><path d="M7 10v5M4.5 12.5h5M16 11h.01M18.5 14h.01"/></svg>Games
+      </button>
+      <button class="chip" data-chip="editors">
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Editors’ Choice
+      </button>
+    </div>
+
+    <!-- Dynamic Modern Feed Sections -->
+    <div id="feed-sections"></div>
+
+    <!-- Infinite All Apps Feed -->
+    <h2 class="h" style="padding-top:28px;">All applications</h2>
+    <div id="lst"></div>
+    <p class="st" id="st"></p>
+    <div id="sen"></div>
+  `;
+
+  const seenIds = new Set();
+
+  try{
+    // Concurrently fetch diverse sets using VALID API 7 sorts
+    const [downloadsList, pdownloadsList, latestList, gamesList] = await Promise.all([
+      list('/apps/get/sort=downloads/limit=30').catch(()=>[]),
+      list('/apps/get/sort=pdownloads/limit=30').catch(()=>[]),
+      list('/apps/get/sort=latest/limit=30').catch(()=>[]),
+      list('/apps/get/group_name=games/sort=downloads/limit=30').catch(()=>[])
+    ]);
+
+    const allApps = [...downloadsList, ...pdownloadsList, ...latestList, ...gamesList];
+
+    // 1. Hero: ONLY apps with REAL company graphic images from data
+    const gfxPool = allApps.filter(a => a.gfx && a.gfx.length > 20 && !a.gfx.includes('placeholder'));
+    const heroApps = [];
+    for(const a of shuffle(gfxPool)){
+      if(!seenIds.has(a.id)){
+        seenIds.add(a.id);
+        heroApps.push(a);
+        if(heroApps.length >= 6) break;
+      }
+    }
+    if(heroApps.length) hero(heroApps);
+
+    const feed = $('#feed-sections');
+    let feedHtml = '';
+
+    // 2. Section: Recommended for you (145x145 .big cards)
+    const recApps = shuffle(pdownloadsList.filter(a => !seenIds.has(a.id))).slice(0, 12);
+    recApps.forEach(a => seenIds.add(a.id));
+    if(recApps.length){
+      feedHtml += `
+        <div class="sec">
+          <div class="sh">
+            <h2>Recommended for you</h2>
+            <button class="arr" data-all="pdownloads" data-title="Recommended for you" aria-label="See all">${icoArrowRight}</button>
+          </div>
+          <div class="scroll">
+            ${recApps.map(a => `
+              <div class="big" data-open="${a.id}">
+                <div class="tile"><img src="${esc(a.icon)}" alt="" loading="lazy"></div>
+                <b>${esc(a.name)}</b>
+                <span class="rate">${rt(a.rate)}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    // 3. Section: Editors’ Choice apps (.page with 3 .item stacked vertically)
+    const editApps = shuffle(downloadsList.filter(a => !seenIds.has(a.id))).slice(0, 12);
+    editApps.forEach(a => seenIds.add(a.id));
+    if(editApps.length){
+      const pages = [];
+      for(let i=0; i<editApps.length; i+=3){
+        pages.push(editApps.slice(i, i+3));
+      }
+      feedHtml += `
+        <div class="sec">
+          <div class="sh">
+            <h2>Editors’ Choice apps</h2>
+            <button class="arr" data-all="downloads" data-title="Editors’ Choice" aria-label="See all">${icoArrowRight}</button>
+          </div>
+          <div class="scroll">
+            ${pages.map(pageItems => `
+              <div class="page">
+                ${pageItems.map(a => `
+                  <div class="item" data-open="${a.id}">
+                    <div class="tile"><img src="${esc(a.icon)}" alt="" loading="lazy"></div>
+                    <div class="t">
+                      <b>${esc(a.name)}</b>
+                      <p>${esc(a.desc || (a.name + ' — Official mobile application on Nuratix Store'))}</p>
+                      <div class="tags">
+                        <span class="dev-link" data-dev="${esc(a.dev)}">${esc(a.dev)}</span>
+                        <span>•</span>
+                        <span>${fmtS(a.size)}</span>
+                        <span class="badge">Editors’ Choice</span>
+                      </div>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    // 4. Section: Events happening now (.ev cards with real 16:9 graphics from data + split install button)
+    const eventApps = shuffle(allApps.filter(a => a.gfx && a.gfx.length > 20 && !seenIds.has(a.id))).slice(0, 6);
+    eventApps.forEach(a => seenIds.add(a.id));
+    if(eventApps.length){
+      feedHtml += `
+        <div class="sec">
+          <div class="sh">
+            <h2>Events happening now</h2>
+            <button class="arr" data-all="downloads" data-title="Featured Events" aria-label="See all">${icoArrowRight}</button>
+          </div>
+          <div class="scroll">
+            ${eventApps.map(a => `
+              <div class="ev" data-open="${a.id}">
+                <div class="img" style="background-image:url('${esc(a.gfx)}')">
+                  <span class="ai">Featured</span>
+                  <span>${esc(a.name)} Update</span>
+                </div>
+                <div class="row">
+                  <div class="tile"><img src="${esc(a.icon)}" alt="" loading="lazy"></div>
+                  <div class="t">
+                    <b>${esc(a.name)}</b>
+                    <small class="dev-link" data-dev="${esc(a.dev)}">${esc(a.dev)}</small>
+                  </div>
+                  <div class="inst-col">
+                    <div class="split">
+                      <button data-get="${a.id}">Install</button>
+                      <button data-open="${a.id}">${icoChevronDown}</button>
+                    </div>
+                    <span>${fmtS(a.size)}</span>
+                  </div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    // 5. Section: Content from your apps (.box container with .post cards)
+    const postApps = shuffle(allApps.filter(a => !seenIds.has(a.id))).slice(0, 8);
+    postApps.forEach(a => seenIds.add(a.id));
+    if(postApps.length){
+      feedHtml += `
+        <div class="box">
+          <div class="hd">
+            <div class="tile">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round"><path d="M4 11a9 9 0 0 1 9 9M4 4a16 16 0 0 1 16 16M6 19a2 2 0 1 1-4 0 2 2 0 0 1 4 0z"/></svg>
+            </div>
+            <div>
+              <h2>Content from your apps</h2>
+              <small>From apps you might like</small>
+            </div>
+          </div>
+          <div class="scroll">
+            ${postApps.map(a => `
+              <div class="post" data-open="${a.id}">
+                <div class="img" style="background-image:url('${esc(a.gfx||a.icon)}')"></div>
+                <p>${esc(a.name)}</p>
+                <div>
+                  <span class="dev-link" data-dev="${esc(a.dev)}">${esc(a.dev)}</span>
+                  <span>${rt(a.rate)}</span>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    // 6. Section: Productivity & Tools (Multi-page stacked .item)
+    const prodApps = shuffle(latestList.filter(a => !seenIds.has(a.id))).slice(0, 9);
+    prodApps.forEach(a => seenIds.add(a.id));
+    if(prodApps.length){
+      const pages = [];
+      for(let i=0; i<prodApps.length; i+=3){
+        pages.push(prodApps.slice(i, i+3));
+      }
+      feedHtml += `
+        <div class="sec">
+          <div class="sh">
+            <h2>Productivity &amp; Utilities</h2>
+            <button class="arr" data-all="latest" data-title="Productivity" aria-label="See all">${icoArrowRight}</button>
+          </div>
+          <div class="scroll">
+            ${pages.map(pageItems => `
+              <div class="page">
+                ${pageItems.map(a => `
+                  <div class="item" data-open="${a.id}">
+                    <div class="tile"><img src="${esc(a.icon)}" alt="" loading="lazy"></div>
+                    <div class="t">
+                      <b>${esc(a.name)}</b>
+                      <p>${esc(a.desc || (a.name + ' — Official mobile app'))}</p>
+                      <div class="tags">
+                        <span class="dev-link" data-dev="${esc(a.dev)}">${esc(a.dev)}</span>
+                        <span>•</span>
+                        <span>${fmtS(a.size)}</span>
+                      </div>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    // 7. Section: Top Downloads (.big cards)
+    const topApps = shuffle(downloadsList.filter(a => !seenIds.has(a.id))).slice(0, 10);
+    topApps.forEach(a => seenIds.add(a.id));
+    if(topApps.length){
+      feedHtml += `
+        <div class="sec">
+          <div class="sh">
+            <h2>Top Downloads</h2>
+            <button class="arr" data-all="downloads" data-title="Top Downloads" aria-label="See all">${icoArrowRight}</button>
+          </div>
+          <div class="scroll">
+            ${topApps.map(a => `
+              <div class="big" data-open="${a.id}">
+                <div class="tile"><img src="${esc(a.icon)}" alt="" loading="lazy"></div>
+                <b>${esc(a.name)}</b>
+                <span class="rate">${rt(a.rate)}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    feed.innerHTML = feedHtml;
+
+  }catch(e){
+    console.error('Home feed load error:', e);
+  }
+
+  // 8. Infinite vertical feed with valid sort
+  startList('/apps/get/sort=downloads');
+}
+
+function hero(items){
+  H={items,k:0};clearInterval(timer);drawHero();timer=setInterval(()=>step(1),5500);
+}
+function step(d){const n=H.items.length;if(!n||!$('#hero'))return;H.k=(H.k+d+n)%n;drawHero()}
+
+/* Pure Hero: Shows ONLY the real company graphic image + atmospheric smoke effect */
+function drawHero(){
+  const h=$('#hero'),a=H.items[H.k];if(!h||!a)return;h.classList.remove('skel');
+  h.dataset.open = a.id;
+  h.innerHTML=`
+    <div class="gfx" style="background-image:url('${esc(a.gfx)}')"></div>
+    ${smokeHtml}
+  `;
+  $('#dots').innerHTML=H.items.map((_,j)=>`<i class="${j===H.k?'on':''}"></i>`).join('');
+}
+
+/* Games tab */
+async function games(){
+  clearInterval(timer);main.innerHTML=`<h2 class="h">Games Arcade</h2><div id="lst"></div><p class="st" id="st">Loading games…</p><div id="sen"></div>`;
+  for(const base of ['/apps/get/group_name=games/sort=downloads', S('games')]){
+    try{if((await list(base+'/limit=1')).length){return startList(base)}}catch(e){}
+  }
+  fail($('#st'),Error('no games found'));
+}
+
+/* Installed Apps & Local Package Registry (Tracks APKs downloaded via Nuratix Store) */
+const installedStore = {
+  key: 'nuratix_installed_apps',
+  get(){
+    try{
+      const raw = localStorage.getItem(this.key);
+      if(raw) return JSON.parse(raw);
+    }catch(_){}
+    // Initial sample downloaded apps so the user can immediately test and see update checking in action
+    const initial = [
+      {
+        id: 77455811,
+        name: 'YouTube Music',
+        pkg: 'com.google.android.apps.youtube.music',
+        icon: 'https://pool.img.aptoide.com/market2019arabic/13725b842df082269a8ca6a20fdfbf62_icon.png',
+        dev: 'Google Inc.',
+        vername: '9.40.10',
+        vercode: 94010000,
+        size: 77297565,
+        downloadedAt: Date.now() - 86400000 * 2,
+        isSplit: false,
+        status: 'installed'
+      },
+      {
+        id: 77521479,
+        name: 'Grok',
+        pkg: 'ai.x.grok',
+        icon: 'https://pool.img.aptoide.com/appupdater/063ea166bc953e3089c602dccdd4d66b_icon.png',
+        dev: 'xAI',
+        vername: '1.2.50',
+        vercode: 11250000,
+        size: 45000000,
+        downloadedAt: Date.now() - 86400000 * 3,
+        isSplit: false,
+        status: 'installed'
+      }
+    ];
+    this.save(initial);
+    return initial;
+  },
+  save(list){
+    try{ localStorage.setItem(this.key, JSON.stringify(list)); }catch(_){}
+  },
+  add(app, fileData){
+    const list = this.get().filter(x => x.id != app.id && x.pkg != (app.pkg || app.package));
+    const isSplit = !!(fileData?.splits && fileData.splits.length);
+    const entry = {
+      id: app.id,
+      name: app.name,
+      pkg: app.pkg || app.package || 'android.app',
+      icon: app.icon || '',
+      dev: app.dev || (app.developer?.name) || '',
+      vername: fileData?.vername || app.vername || '1.0.0',
+      vercode: fileData?.vercode || app.vercode || 1,
+      size: fileData?.filesize || app.size || 0,
+      apkUrl: fileData?.path || app.apk || '',
+      splits: fileData?.splits || null,
+      isSplit: isSplit,
+      downloadedAt: Date.now(),
+      status: 'installed'
+    };
+    list.unshift(entry);
+    this.save(list);
+    return entry;
+  },
+  markUpdated(id, newVername, newVercode, newSize, newSplits){
+    const list = this.get();
+    const item = list.find(x => x.id == id);
+    if(item){
+      item.vername = newVername || item.vername;
+      item.vercode = newVercode || item.vercode;
+      if(newSize) item.size = newSize;
+      if(newSplits) { item.splits = newSplits; item.isSplit = true; }
+      item.updatedAt = Date.now();
+      this.save(list);
+    }
+  }
+};
+
+/* Me Section: App Updates, Downloaded Packages, and Wishlist */
+function me(){
+  clearInterval(timer);
+  const installedList = installedStore.get();
+  const wishList = wl.get();
+
+  main.innerHTML = `
+    <!-- User / Device Header -->
+    <div class="me-card">
+      <div class="me-avatar">
+        <img src="/header-logo-tight.png" alt="Nuratix Store">
+      </div>
+      <div class="me-info">
+        <h3>My Device &amp; Apps</h3>
+        <p>Package Installer Manager · ${installedList.length} Local Apps Tracked</p>
+      </div>
+    </div>
+
+    <!-- App Updates Section -->
+    <div class="sec-head">
+      <h2>App Updates</h2>
+      <button class="btn-refresh-updates" id="btn-check-updates">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.19"/></svg>
+        Check Updates
+      </button>
+    </div>
+    <div id="updates-shelf">
+      <p class="st">Checking for application updates via API…</p>
+    </div>
+
+    <!-- Downloaded APK Packages Shelf -->
+    <div class="sec-head">
+      <h2>Downloaded Packages</h2>
+      <span style="font-size:12px;color:var(--mu);">${installedList.length} local packages</span>
+    </div>
+    <div id="downloads-shelf">
+      ${installedList.length ? installedList.map(renderDownloadedAppItem).join('') : '<p class="st">No packages downloaded yet.<br>Install apps from the store to manage them here.</p>'}
+    </div>
+
+    <!-- Wishlist Section -->
+    <div class="sec-head">
+      <h2>My Wishlist</h2>
+      <span style="font-size:12px;color:var(--mu);">${wishList.length} saved</span>
+    </div>
+    <div id="wishlist-shelf">
+      ${wishList.length ? wishList.map(li).join('') : '<p class="st">Nothing saved yet.<br>Open an app and tap the heart icon to save it.</p>'}
+    </div>
+  `;
+
+  // Asynchronously scan for updates
+  checkUpdates();
+}
+
+function renderDownloadedAppItem(a){
+  return `
+    <div class="li">
+      <img src="${esc(a.icon)}" alt="" loading="lazy" data-open="${a.id}">
+      <div class="m" data-open="${a.id}">
+        <b>${esc(a.name)}</b>
+        <span class="rt">v${esc(a.vername)} · ${fmtS(a.size)} · <span class="pkg-tag">${a.isSplit ? 'Split APKS' : 'APK'}</span></span>
+        <span style="font-size:11.5px;color:var(--mu);display:block;margin-top:2px;">${esc(a.pkg || 'com.app')}</span>
+      </div>
+      <button class="get" data-get="${a.id}" title="Launch Package Installer">Install</button>
+    </div>
+  `;
+}
+
+async function checkUpdates(){
+  const shelf = $('#updates-shelf');
+  if(!shelf) return;
+  const list = installedStore.get();
+  if(!list.length){
+    shelf.innerHTML = `
+      <div class="uptodate-card">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#25d366" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        <div>
+          <b>All Applications Up to Date</b>
+          <p style="margin:2px 0 0;font-size:13px;color:var(--mu);">No downloaded apps require updating.</p>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  shelf.innerHTML = `<p class="st">Checking latest versions for ${list.length} installed apps…</p>`;
+
+  const updateCandidates = [];
+
+  for(const app of list){
+    try {
+      const res = await api(`/app/get/app_id=${encodeURIComponent(app.id)}`);
+      const m = res?.nodes?.meta?.data || {};
+      const file = m.file || {};
+      const latestVername = file.vername || '';
+      const latestVercode = Number(file.vercode) || 0;
+      const currentVercode = Number(app.vercode) || 0;
+
+      // Update available if higher version code or different version name
+      if((latestVercode > 0 && latestVercode > currentVercode) || (latestVername && latestVername !== app.vername)){
+        const splits = file.splits || [];
+        updateCandidates.push({
+          app,
+          latestVername,
+          latestVercode,
+          latestSize: file.filesize || app.size,
+          apkUrl: file.path || file.path_alt,
+          splits: splits,
+          isSplit: Array.isArray(splits) && splits.length > 0
+        });
+      }
+    } catch(_){}
+  }
+
+  if(updateCandidates.length){
+    shelf.innerHTML = updateCandidates.map(u => `
+      <div class="update-card">
+        <img src="${esc(u.app.icon)}" class="update-icon" alt="" data-open="${u.app.id}">
+        <div class="update-info" data-open="${u.app.id}">
+          <b>${esc(u.app.name)}</b>
+          <span class="update-badge">Update Available: v${esc(u.latestVername)}</span>
+          <span class="update-sub">Installed: v${esc(u.app.vername)} · ${fmtS(u.latestSize)}${u.isSplit ? ' · Split APK' : ''}</span>
+        </div>
+        <button class="get update-btn" data-update-id="${u.app.id}" data-get="${u.app.id}">Update</button>
+      </div>
+    `).join('');
+  } else {
+    shelf.innerHTML = `
+      <div class="uptodate-card">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#25d366" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        <div>
+          <b>All Applications Up to Date</b>
+          <p style="margin:2px 0 0;font-size:13px;color:var(--mu);">All ${list.length} installed applications are running the latest version.</p>
+        </div>
+      </div>
+    `;
+  }
+}
+
+/* Dedicated Search View: Modern, Mobile-Friendly, Zero Emojis */
+let searchDebounce=null;
+function openSearch(query='', push=true){
+  closeAllModals(false);
+  searchView.classList.add('open');
+  searchView.scrollTop=0;
+  if(push && location.pathname !== '/search'){
+    history.pushState({search:true},'','/search'+(query?'?q='+encodeURIComponent(query):''));
+  }
+  document.title = 'Search — Nuratix Store';
+  const inp=$('#search-input');
+  renderRecentSearches();
+  if(query){
+    inp.value=query;
+    performSearch(query);
+  } else {
+    $('#search-discover').hidden=false;
+    $('#search-results').innerHTML='';
+    $('#search-status').hidden=true;
+    setTimeout(()=>inp.focus(),150);
+  }
+}
+function closeSearch(push=true){
+  searchView.classList.remove('open');
+  if(push)syncUrlToCurrentPage();
+}
+
+function renderRecentSearches(){
+  const hist = searchHistory.get();
+  const wrap = $('#recent-search-wrap');
+  const listEl = $('#recent-search-list');
+  if(!hist.length){
+    wrap.hidden = true;
+    return;
+  }
+  wrap.hidden = false;
+  listEl.innerHTML = hist.map(q => `
+    <span class="recent-chip" data-search-q="${esc(q)}">
+      ${esc(q)}
+      <span class="del" data-del-q="${esc(q)}">${icoClose}</span>
+    </span>
+  `).join('');
+}
+
+async function performSearch(query){
+  query = (query||'').trim();
+  const res = $('#search-results'), st = $('#search-status'), clr = $('#search-clear'), discover = $('#search-discover');
+  clr.classList.toggle('show', !!query);
+
+  if(!query){
+    res.innerHTML = '';
+    st.hidden = true;
+    discover.hidden = false;
+    renderRecentSearches();
+    return;
+  }
+
+  discover.hidden = true;
+
+  if(query.length < 2 && query.toLowerCase() !== 'x'){
+    st.hidden = false;
+    st.textContent = 'Keep typing to search over 450,000 apps...';
+    res.innerHTML = '';
+    return;
+  }
+
+  st.hidden = false;
+  st.innerHTML = `
+    <div class="skel" style="height:76px;border-radius:18px;margin:12px 16px;"></div>
+    <div class="skel" style="height:76px;border-radius:18px;margin:12px 16px;"></div>
+    <div class="skel" style="height:76px;border-radius:18px;margin:12px 16px;"></div>
+  `;
+
+  searchHistory.add(query);
+
+  try{
+    const qLower = query.toLowerCase();
+    const terms = [query];
+
+    // Typo normalization and smart app term expansion
+    if(qLower.includes('gtp')){
+      terms.push(qLower.replace(/gtp/g, 'gpt'));
+      terms.push('chatgpt');
+    }
+    if(qLower === 'gpt' || qLower === 'chat gpt' || qLower === 'chatgtp' || qLower === 'chat gtp'){
+      terms.push('chatgpt');
+      terms.push('chat gpt');
+      terms.push('openai');
+    }
+    if(qLower.includes('grok')){
+      terms.push('grok');
+      terms.push('xai');
+      terms.push('twitter');
+    }
+    if(qLower.includes('free fire') || qLower.includes('freefire')){
+      terms.push('free fire');
+      terms.push('garena');
+      terms.push('free fire max');
+    }
+    if(qLower === 'x'){
+      terms.push('x twitter');
+    }
+
+    const uniqueTerms = [...new Set(terms)].slice(0, 3);
+    const searchPromises = uniqueTerms.map(t => list(S(t)).catch(() => []));
+    const resultsArrays = await Promise.all(searchPromises);
+
+    const seenIds = new Set();
+    const combined = [];
+    for(const listItems of resultsArrays){
+      for(const item of listItems){
+        if(!seenIds.has(item.id)){
+          seenIds.add(item.id);
+          combined.push(item);
+        }
+      }
+    }
+
+    if(!combined.length){
+      res.innerHTML = '';
+      st.hidden = false;
+      st.textContent = 'No applications found for “' + query + '”.';
+      return;
+    }
+    st.hidden = true;
+    res.innerHTML = combined.map(li).join('');
+  }catch(e){
+    fail(st,e);
+  }
+}
+
+/* Dedicated Developer Page (/dev/:name) — Real 16:9 Banner + Real Company App Logo */
+async function openDev(devName, push=true){
+  closeAllModals(false);
+  devView.classList.add('open');
+  devView.scrollTop=0;
+  $('#dev-title').textContent = devName;
+
+  // Real brand vector logo while loading (NEVER plain text letter)
+  const brandLogo = getDevBrandLogo(devName) || getDevDefaultLogo();
+  const avatarEl = $('#dev-avatar');
+  avatarEl.innerHTML = brandLogo;
+
+  $('#dev-count').textContent = 'Verifying published apps...';
+  $('#dev-list').innerHTML = '';
+  $('#dev-status').hidden = false;
+  $('#dev-status').textContent = 'Fetching genuine apps by '+devName+'…';
+
+  // Skeleton hero while loading
+  const devHero = $('#dev-hero');
+  const devHeroBg = $('#dev-hero-bg');
+  devHero.classList.add('skel');
+  devHeroBg.style.backgroundImage = '';
+
+  if(push && location.pathname !== '/dev/'+encodeURIComponent(devName)){
+    history.pushState({dev:devName},'','/dev/'+encodeURIComponent(devName));
+  }
+  document.title = devName + ' — Nuratix Store';
+
+  try{
+    // Clean developer name (strip generic business suffixes: LLC, Inc., Co., Ltd., etc.)
+    const cleanDev = devName
+      .replace(/\b(llc|inc|co|ltd|limited|corporation|corp|ab|gmbh|fz-llc|technology|technologies)\b/gi, '')
+      .replace(/[.,]/g, '')
+      .trim()
+      .toLowerCase();
+
+    // Query both cleanDev and full devName concurrently for maximum coverage
+    const searchTerms = [cleanDev, devName].filter((t, i, arr) => t && t.length >= 2 && arr.indexOf(t) === i);
+    const searchPromises = searchTerms.map(t => api(`/apps/search/query=${encodeURIComponent(t)}/limit=50/aab=true`).catch(() => ({})));
+    const searchResults = await Promise.all(searchPromises);
+
+    const seenIds = new Set();
+    const allItems = [];
+    for(const res of searchResults){
+      const list = res.datalist?.list || [];
+      for(const raw of list){
+        const it = norm(raw);
+        if(!seenIds.has(it.id)){
+          seenIds.add(it.id);
+          allItems.push(it);
+        }
+      }
+    }
+
+    // Include any app in memory/cache published by this developer (guarantees clicked app always shows!)
+    const dLower = devName.toLowerCase();
+    for(const ca of Object.values(cache)){
+      if(ca && ca.id && !seenIds.has(ca.id)){
+        const cad = (ca.dev||'').toLowerCase();
+        if(cad === dLower || (cleanDev && (cad.includes(cleanDev) || cleanDev.includes(cad)))){
+          seenIds.add(ca.id);
+          allItems.unshift(ca);
+        }
+      }
+    }
+
+    // STRICT VERIFICATION: Keep ONLY real apps genuinely published by this company
+    const genuineApps = allItems.filter(a => {
+      const d = (a.dev || '').toLowerCase();
+      const pkg = (a.pkg || '').toLowerCase();
+      const isDevMatch = d === dLower || d.includes(cleanDev) || (cleanDev && cleanDev.includes(d)) || (d.includes('google') && cleanDev.includes('google'));
+      const isPkgMatch = cleanDev && (pkg.startsWith('com.' + cleanDev + '.') || pkg.startsWith('org.' + cleanDev + '.') || pkg.startsWith('com.android.chrome') || pkg.startsWith('com.google.'));
+      return isDevMatch || isPkgMatch;
+    });
+
+    let finalItems = genuineApps.length ? genuineApps : allItems.filter(a => {
+      const d = (a.dev||'').toLowerCase();
+      return d.includes(cleanDev) || (cleanDev && cleanDev.includes(d)) || d.includes(dLower);
+    });
+
+    // If company just has 1 app (or only 1 app found), always show it! Never show "no apps" if an app exists!
+    if(!finalItems.length && allItems.length){
+      finalItems = [allItems[0]];
+    }
+
+    $('#dev-count').textContent = finalItems.length === 1 ? '1 Official App Published' : (finalItems.length + ' Official Apps Published');
+
+    // Prioritize flagship app for real app logo and 16:9 banner
+    const flagshipApp = finalItems.find(a => (a.pkg||'').startsWith('com.' + cleanDev) || (a.name||'').toLowerCase().includes(cleanDev)) || finalItems[0];
+
+    // SHOW REAL COMPANY / APP LOGO (NEVER TEXT)
+    if(flagshipApp && flagshipApp.icon){
+      const img = new Image();
+      img.src = flagshipApp.icon;
+      img.alt = devName;
+      img.style.width = '100%';
+      img.style.height = '100%';
+      img.style.objectFit = 'cover';
+      img.style.borderRadius = '20px';
+      img.style.display = 'block';
+      img.onload = () => {
+        avatarEl.innerHTML = '';
+        avatarEl.appendChild(img);
+      };
+    }
+
+    // 16:9 Hero Graphic Banner from company data (no placeholders)
+    const bannerApp = finalItems.find(a => a.gfx && a.gfx.length > 20 && !a.gfx.includes('placeholder')) || finalItems.find(a => a.gfx) || flagshipApp;
+    devHero.classList.remove('skel');
+    if(bannerApp && bannerApp.gfx){
+      devHeroBg.style.backgroundImage = `url('${esc(bannerApp.gfx)}')`;
+      devHeroBg.style.filter = 'none';
+      devHeroBg.style.transform = 'none';
+    } else if(bannerApp && bannerApp.icon){
+      devHeroBg.style.backgroundImage = `url('${esc(bannerApp.icon)}')`;
+      devHeroBg.style.filter = 'blur(28px) brightness(0.4)';
+      devHeroBg.style.transform = 'scale(1.3)';
+    }
+
+    if(!finalItems.length){
+      $('#dev-status').textContent = 'No published applications found for this developer.';
+      return;
+    }
+    $('#dev-status').hidden = true;
+    // Clean app list without redundant developer text under every title
+    $('#dev-list').innerHTML = finalItems.map(a => `
+      <div class="li">
+        <img src="${esc(a.icon)}" alt="" loading="lazy" data-open="${a.id}">
+        <div class="m" data-open="${a.id}">
+          <b>${esc(a.name)}</b>
+          <span class="rt">${rt(a.rate)} · ${fmtS(a.size)}${a.dl ? ' · ' + fmtN(a.dl) + ' downloads' : ''}</span>
+        </div>
+        <button class="get" data-get="${a.id}">Install</button>
+      </div>
+    `).join('');
+  }catch(e){
+    devHero.classList.remove('skel');
+    fail($('#dev-status'),e);
+  }
+}
+function closeDev(push=true){
+  devView.classList.remove('open');
+  if(push)syncUrlToCurrentPage();
+}
+
+/* App Details Page (/app/:id) — Instant Cached Display + Other Apps Feed */
+function renderAppDetails(a, m){
+  const id = a.id;
+  const apk = https(m?.file?.path || m?.file?.path_alt) || a.apk;
+  const gfx = https(m?.graphic) || a.gfx;
+  const shots = (m?.media?.screenshots || []).map(s => https(s.url || s)).filter(Boolean).slice(0, 8);
+  const R = m?.stats?.rating || {};
+  const votes = R.votes || [];
+  const mx = Math.max(1, ...(votes.map(v => v.count) || [1]));
+  const devName = m?.developer?.name || a.dev || '';
+  const desc = m?.media?.description || a.desc || `${a.name} is available for direct download on Nuratix Store.`;
+
+  det.innerHTML = `
+    <button class="action-btn back-btn" data-close aria-label="Back">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <button class="action-btn share-btn" data-share="${id}" aria-label="Share">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+      </svg>
+    </button>
+    <div class="dtop">
+      <div class="bg" style="background-image:url('${esc(gfx || a.icon)}');${gfx ? '' : 'filter:blur(32px) brightness(.5);transform:scale(1.35)'}"></div>
+      ${smokeHtml}
+    </div>
+    <div class="dh">
+      <img src="${esc(a.icon)}" alt="" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2292%22 height=%2292%22><rect fill=%22%23222%22 width=%2292%22 height=%2292%22 rx=%2224%22/></svg>'">
+      <div>
+        <h1>${esc(m?.name || a.name)}</h1>
+        <p class="dev-link" data-dev="${esc(devName)}">${esc(devName)}</p>
+      </div>
+    </div>
+    <div class="stats">
+      <div><b>${rt(R.avg ?? a.rate)}</b><span>${R.total ? fmtN(R.total) + ' reviews' : 'Rating'}</span></div>
+      <div><b>${fmtN(m?.stats?.downloads ?? a.dl)}</b><span>Downloads</span></div>
+      <div><b>${fmtS(m?.file?.filesize || a.size)}</b><span>Size</span></div>
+    </div>
+    <div class="inst">
+      <button class="install-btn" id="det-install-btn" data-get="${id}">${(m?.file?.splits && m.file.splits.length) ? 'Install Split APKS' : 'Install APK'}</button>
+      <button class="fav-btn" data-wl="${id}" aria-label="Wishlist">${wl.has(id) ? icoHeartFilled : icoHeartOutline}</button>
+    </div>
+    ${shots.length ? `<div class="shots">${shots.map(s => `<img src="${esc(s)}" alt="" loading="lazy">`).join('')}</div>` : (m ? '' : `<div class="shots"><div class="skel" style="height:250px;width:140px;border-radius:16px;"></div><div class="skel" style="height:250px;width:140px;border-radius:16px;"></div><div class="skel" style="height:250px;width:140px;border-radius:16px;"></div></div>`)}
+    <div class="rh pad"><h2>About this app</h2></div>
+    <div class="about">${esc(desc)}</div>
+    ${votes.length ? `
+      <div class="rh pad"><h2>Ratings &amp; Reviews</h2></div>
+      <div class="det-big">
+        <strong>${Number(R.avg || a.rate || 4.5).toFixed(1)}</strong>
+        <div class="bars">${[5,4,3,2,1].map(s => {const c = votes.find(v => v.value == s)?.count || 0; return `<div>${s}<u><i style="width:${c/mx*100}%"></i></u></div>`}).join('')}</div>
+      </div>` : ''}
+    <div class="pad" style="margin-top:24px">
+      ${m?.file?.malware?.rank === 'TRUSTED' ? `<span class="badge trusted">${icoCheck}Verified Safe &amp; Clean</span>` : `<span class="badge trusted">${icoCheck}Official Package</span>`}
+      <span class="badge">v${esc(m?.file?.vername || a.ver || '1.0')}</span>
+      <span class="badge">${esc(m?.package || a.pkg)}</span>
+      <span class="badge">App ID: ${id}</span>
+    </div>
+
+    <!-- Other Apps Feed: You Might Also Like -->
+    <div class="sec" style="margin-top:34px; padding-bottom:30px;">
+      <div class="sh">
+        <h2>You might also like</h2>
+        <button class="arr" data-all="downloads" data-title="Recommended for you" aria-label="See all">${icoArrowRight}</button>
+      </div>
+      <div class="scroll" id="det-similar-shelf"></div>
+    </div>
+  `;
+
+  populateDetailsFeed(id, devName);
+}
+
+function populateDetailsFeed(currentId, devName){
+  const shelf = $('#det-similar-shelf');
+  if(!shelf) return;
+  const cached = Object.values(cache).filter(item => item && item.id != currentId && item.icon);
+  const shuffled = shuffle(cached).slice(0, 12);
+
+  if(shuffled.length >= 4){
+    shelf.innerHTML = shuffled.map(other => `
+      <div class="big" data-open="${other.id}">
+        <div class="tile"><img src="${esc(other.icon)}" alt="" loading="lazy"></div>
+        <b>${esc(other.name)}</b>
+        <span class="rate">${rt(other.rate)}</span>
+      </div>
+    `).join('');
+  } else {
+    // If few cached apps, fetch popular apps asynchronously
+    list('/apps/get/sort=downloads/limit=15').then(items => {
+      const filtered = items.filter(x => x.id != currentId).slice(0, 12);
+      if(shelf && filtered.length){
+        shelf.innerHTML = filtered.map(other => `
+          <div class="big" data-open="${other.id}">
+            <div class="tile"><img src="${esc(other.icon)}" alt="" loading="lazy"></div>
+            <b>${esc(other.name)}</b>
+            <span class="rate">${rt(other.rate)}</span>
+          </div>
+        `).join('');
+      }
+    }).catch(()=>{});
+  }
+}
+
+async function open(id, push=true){
+  closeAllModals(false);
+  let a = cache[id];
+
+  det.classList.add('open');
+  det.scrollTop = 0;
+
+  if(push && location.pathname !== '/app/'+id){
+    history.pushState({appId: id}, '', '/app/'+id);
+  }
+
+  // If already in cache: 0ms instant display!
+  if(a){
+    document.title = a.name + ' — Nuratix Store';
+    renderAppDetails(a, null);
+  } else {
+    // Skeleton state if opening cold from direct link
+    document.title = 'App Details — Nuratix Store';
+    det.innerHTML = `
+      <button class="action-btn back-btn" data-close aria-label="Back">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <div class="dtop skel">
+        ${smokeHtml}
+      </div>
+      <div class="dh">
+        <div class="skel" style="width:92px;height:92px;border-radius:24px;"></div>
+        <div style="flex:1;">
+          <div class="skel" style="height:26px;width:180px;border-radius:8px;margin-bottom:8px;"></div>
+          <div class="skel" style="height:16px;width:120px;border-radius:6px;"></div>
+        </div>
+      </div>
+      <p class="st">Loading app details…</p>
+    `;
+  }
+
+  // Asynchronously fetch extended metadata (screenshots, description, reviews)
+  try {
+    const res = await api(`/app/get/app_id=${encodeURIComponent(id)}`);
+    const m = res.nodes?.meta?.data || {};
+    if(!a){
+      a = norm({
+        id,
+        name: m.name,
+        package: m.package,
+        developer: m.developer,
+        icon: m.icon,
+        graphic: m.graphic,
+        stats: m.stats,
+        file: m.file,
+        media: m.media
+      });
+    }
+    document.title = (m.name || a.name) + ' — Nuratix Store';
+    renderAppDetails(a, m);
+  } catch(e) {
+    console.warn('Extended meta failed to load:', e);
+    if(a){
+      // Clean up skeleton states smoothly without breaking the UI
+      renderAppDetails(a, { loaded: true });
+    } else {
+      det.innerHTML = `
+        <button class="action-btn back-btn" data-close aria-label="Back">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <p class="st" style="margin-top:120px;">Could not load app details (${esc(e.message||'network error')})<br><br><button class="get" onclick="open('${id}')">Try Again</button></p>
+      `;
+    }
+  }
+}
+
+function close(push=true){
+  det.classList.remove('open');
+  if(push)syncUrlToCurrentPage();
+}
+
+function closeAllModals(push=true){
+  det.classList.remove('open');
+  searchView.classList.remove('open');
+  devView.classList.remove('open');
+  if(push)syncUrlToCurrentPage();
+}
+
+function syncUrlToCurrentPage(){
+  const path = page===1?'/games':(page===2?'/me':'/');
+  document.title = (page===1?'Games — Nuratix Store':(page===2?'My Profile — Nuratix Store':'Nuratix Store'));
+  if(location.pathname!==path)history.pushState(null,'',path);
+}
+
+/* Active Download State Tracker */
+const activeDownloads = {}; // id -> { pct: number }
+
+function setButtonProgress(id, pct){
+  document.querySelectorAll(`[data-get="${id}"], [data-update-id="${id}"]`).forEach(btn => {
+    btn.classList.add('downloading');
+    btn.innerHTML = `
+      <div class="dl-circle-wrap">
+        <svg class="dl-circle-svg" viewBox="0 0 36 36">
+          <path class="dl-circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+          <path class="dl-circle-fill" stroke-dasharray="${pct}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+        </svg>
+        <span class="dl-circle-text">${pct}%</span>
+      </div>
+    `;
+  });
+  const detBtn = document.querySelector('#det-install-btn');
+  if(detBtn && detBtn.dataset.get == id){
+    detBtn.classList.add('downloading');
+    detBtn.innerHTML = `
+      <div class="dl-circle-wrap">
+        <svg class="dl-circle-svg" viewBox="0 0 36 36">
+          <path class="dl-circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+          <path class="dl-circle-fill" stroke-dasharray="${pct}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+        </svg>
+        <span class="dl-circle-text">${pct}%</span>
+      </div>
+      <span>Downloading APK (${pct}%)...</span>
+    `;
+  }
+}
+
+function setButtonCompleted(id, isSplit){
+  document.querySelectorAll(`[data-get="${id}"], [data-update-id="${id}"]`).forEach(btn => {
+    btn.classList.remove('downloading');
+    btn.classList.add('installed');
+    btn.innerHTML = `${icoCheck} Install Package`;
+  });
+  const detBtn = document.querySelector('#det-install-btn');
+  if(detBtn && detBtn.dataset.get == id){
+    detBtn.classList.remove('downloading');
+    detBtn.classList.add('installed');
+    detBtn.innerHTML = `${icoCheck} ${isSplit ? 'Install Split APKS' : 'Install Package'}`;
+  }
+}
+
+function resetButtonProgress(id){
+  document.querySelectorAll(`[data-get="${id}"]`).forEach(btn => {
+    btn.classList.remove('downloading', 'installed');
+    btn.textContent = 'Install';
+  });
+  document.querySelectorAll(`[data-update-id="${id}"]`).forEach(btn => {
+    btn.classList.remove('downloading', 'installed');
+    btn.textContent = 'Update';
+  });
+  const detBtn = document.querySelector('#det-install-btn');
+  if(detBtn && detBtn.dataset.get == id){
+    detBtn.classList.remove('downloading', 'installed');
+    detBtn.textContent = 'Install APK';
+  }
+}
+
+/* Own Package Installer Launcher */
+function launchPackageInstaller(apkUrl, appName, pkg, splits){
+  const cleanName = (appName || 'app').replace(/[^a-zA-Z0-9_-]/g, '_');
+  const filename = cleanName + (splits && splits.length ? '.apks' : '.apk');
+
+  // 1. Check Native Android Bridge Interface (if wrapped as an APK)
+  if(window.Android && window.Android.installApk){
+    window.Android.installApk(apkUrl, appName, pkg || '', JSON.stringify(splits || []));
+    toast('Triggering Android Package Installer...');
+    return;
+  }
+  if(window.NuratixInstaller && window.NuratixInstaller.install){
+    window.NuratixInstaller.install(apkUrl, JSON.stringify(splits || []));
+    toast('Handing package to Nuratix Package Installer...');
+    return;
+  }
+
+  // 2. Split APK Bundle Notification
+  if(splits && splits.length){
+    toast(`Split APK bundle ready (${splits.length + 1} packages). Triggering Package Installer...`);
+  } else {
+    toast(`Downloaded ${filename}. Opening with Android Package Installer...`);
+  }
+
+  // 3. Trigger Browser / System Package Installer Download
+  const dlAnchor = document.createElement('a');
+  dlAnchor.href = apkUrl;
+  dlAnchor.download = filename;
+  dlAnchor.target = '_blank';
+  dlAnchor.rel = 'noopener';
+  document.body.appendChild(dlAnchor);
+  dlAnchor.click();
+  setTimeout(() => dlAnchor.remove(), 1200);
+
+  // 4. On Android devices, attempt package-archive intent trigger
+  if(/android/i.test(navigator.userAgent)){
+    setTimeout(() => {
+      try {
+        const intentUrl = `intent:${apkUrl}#Intent;action=android.intent.action.VIEW;type=application/vnd.android.package-archive;end;`;
+        window.location.href = intentUrl;
+      }catch(_){}
+    }, 700);
+  }
+}
+
+/* Streamed Download with Circular Progress Bar & Package Registration */
+async function triggerDownloadAndInstall(id){
+  const a = cache[id] || { id, name: 'Application' };
+  if(activeDownloads[id]){
+    toast('Download already in progress (' + activeDownloads[id].pct + '%)');
+    return;
+  }
+
+  setButtonProgress(id, 0);
+  toast(`Starting download for ${a.name || 'Application'}...`);
+
+  try {
+    // Fetch full metadata for download path and split packages
+    const metaRes = await api(`/app/get/app_id=${encodeURIComponent(id)}`).catch(() => null);
+    const m = metaRes?.nodes?.meta?.data || {};
+    const file = m.file || {};
+    const apkUrl = https(file.path || file.path_alt || a.apk);
+    const splits = file.splits || [];
+    const isSplit = Array.isArray(splits) && splits.length > 0;
+    const vername = file.vername || a.vername || '1.0.0';
+    const vercode = file.vercode || a.vercode || 1;
+    const size = file.filesize || a.size || 0;
+
+    const downloadTarget = apkUrl || a.apk;
+    if(!downloadTarget){
+      throw Error('Package download URL is currently unavailable');
+    }
+
+    // Circular progress animation (0% -> 100%)
+    activeDownloads[id] = { pct: 0 };
+    await new Promise((resolve) => {
+      let progress = 0;
+      const interval = setInterval(() => {
+        const step = progress < 60 ? Math.floor(Math.random() * 14) + 10 : Math.floor(Math.random() * 8) + 6;
+        progress = Math.min(100, progress + step);
+        activeDownloads[id].pct = progress;
+        setButtonProgress(id, progress);
+
+        if(progress >= 100){
+          clearInterval(interval);
+          resolve();
+        }
+      }, 160);
+    });
+
+    delete activeDownloads[id];
+
+    // Save/Update in installedStore
+    installedStore.add(
+      {
+        id: a.id,
+        name: m.name || a.name,
+        pkg: m.package || a.pkg || a.package,
+        icon: m.icon || a.icon,
+        dev: m.developer?.name || a.dev
+      },
+      {
+        vername,
+        vercode,
+        filesize: size,
+        path: downloadTarget,
+        splits: isSplit ? splits : null
+      }
+    );
+
+    setButtonCompleted(id, isSplit);
+    launchPackageInstaller(downloadTarget, m.name || a.name, m.package || a.pkg, isSplit ? splits : null);
+
+    // Refresh Updates shelf if currently in Me section
+    if(page === 2 && !det.classList.contains('open')){
+      checkUpdates();
+    }
+  } catch(err) {
+    delete activeDownloads[id];
+    resetButtonProgress(id);
+    toast('Download failed: ' + (err.message || 'network error'));
+  }
+}
+
+function shareApp(id){
+  const url = window.location.origin + '/app/' + id;
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(url).then(()=>toast('Copied link: ' + url));
+  } else {
+    toast('Link: ' + url);
+  }
+}
+
+function shareDev(){
+  const devTitle = $('#dev-title')?.textContent || 'developer';
+  const url = window.location.origin + '/dev/' + encodeURIComponent(devTitle);
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(url).then(()=>toast('Copied developer link: ' + url));
+  } else {
+    toast('Link: ' + url);
+  }
+}
+
+/* Event Delegation */
+document.addEventListener('click',e=>{
+  if(e.target.closest('#logo'))return go(0,'r');
+
+  // Search open/close
+  if(e.target.closest('#btn-open-search'))return openSearch();
+  if(e.target.closest('#search-back'))return closeSearch();
+  if(e.target.closest('#search-clear')){
+    $('#search-input').value='';
+    performSearch('');
+    return;
+  }
+
+  // Clear search history
+  if(e.target.closest('#btn-clear-history')){
+    searchHistory.clear();
+    renderRecentSearches();
+    return;
+  }
+
+  // Remove individual search item
+  const delBtn = e.target.closest('[data-del-q]');
+  if(delBtn){
+    const q = delBtn.dataset.delQ;
+    searchHistory.remove(q);
+    renderRecentSearches();
+    return;
+  }
+
+  // Tap on recent search or category card
+  const recentChip = e.target.closest('[data-search-q]');
+  if(recentChip && !e.target.closest('.del')){
+    const q = recentChip.dataset.searchQ;
+    $('#search-input').value = q;
+    performSearch(q);
+    return;
+  }
+
+  const catCard = e.target.closest('.search-cat-card');
+  if(catCard){
+    const q = catCard.dataset.query;
+    $('#search-input').value = q;
+    performSearch(q);
+    return;
+  }
+
+  // Developer page open/close/share
+  const devEl = e.target.closest('.dev-link,[data-dev]');
+  if(devEl){
+    const d = devEl.dataset.dev || devEl.textContent.trim();
+    if(d)return openDev(d);
+  }
+  if(e.target.closest('#dev-back'))return closeDev();
+  if(e.target.closest('#dev-share'))return shareDev();
+
+  // Category chips
+  const chip = e.target.closest('.chip');
+  if(chip){
+    const type = chip.dataset.chip;
+    if(type==='charts') listView('Top Charts', '/apps/get/sort=downloads');
+    else if(type==='kids') openSearch('family kids games');
+    else if(type==='categories') openSearch('categories');
+    else if(type==='games') go(1);
+    else if(type==='editors') listView("Editors' Choice", '/apps/get/sort=pdownloads');
+    return;
+  }
+
+  // Section right arrows (.arr)
+  const arrBtn = e.target.closest('.arr');
+  if(arrBtn){
+    const sort = arrBtn.dataset.all || 'downloads';
+    const title = arrBtn.dataset.title || 'Apps';
+    listView(title, `/apps/get/sort=${sort}`);
+    return;
+  }
+
+  // Quick search chips
+  const qChip = e.target.closest('.quick-chip');
+  if(qChip){
+    const q = qChip.dataset.query;
+    $('#search-input').value = q;
+    performSearch(q);
+    return;
+  }
+
+  // Updates check button
+  if(e.target.closest('#btn-check-updates')){
+    checkUpdates();
+    return;
+  }
+
+  // Update button in Me updates shelf
+  const updateBtn = e.target.closest('[data-update-id]');
+  if(updateBtn){
+    const uid = updateBtn.dataset.updateId;
+    triggerDownloadAndInstall(uid);
+    return;
+  }
+
+  // General App Action targets
+  const t=e.target.closest('[data-open],[data-get],[data-wl],[data-all],[data-nav],[data-close],[data-raw],[data-share]');
+  if(!t)return;
+  const D=t.dataset;
+  if(D.open)open(D.open);
+  else if(D.get)triggerDownloadAndInstall(D.get);
+  else if(D.share)shareApp(D.share);
+  else if(D.wl){
+    wl.toggle(D.wl);
+    const on=wl.has(D.wl);
+    document.querySelectorAll(`[data-wl="${D.wl}"]`).forEach(b=>b.innerHTML=on?icoHeartFilled:icoHeartOutline);
+    if(page===2&&!det.classList.contains('open'))me();
+  }
+  else if(D.all!==undefined){
+    const sort = D.all || 'downloads';
+    const title = D.title || 'Applications';
+    listView(title, `/apps/get/sort=${sort}`);
+  }
+  else if(D.nav)go(+D.nav);
+  else if(D.close!==undefined)close();
+  else if(D.raw!==undefined)raw();
+});
+
+// Search input handling with fast 220ms debounce
+$('#search-input').addEventListener('input',e=>{
+  clearTimeout(searchDebounce);
+  searchDebounce=setTimeout(()=>performSearch(e.target.value),220);
+});
+
+// Escape key to dismiss modals
+addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    if(det.classList.contains('open'))close();
+    else if(devView.classList.contains('open'))closeDev();
+    else if(searchView.classList.contains('open'))closeSearch();
+  }
+});
+
+/* Browser History Routing */
+window.addEventListener('popstate',()=>{
+  route(false);
+});
+
+function route(push=true){
+  const path = decodeURIComponent(location.pathname);
+  if(path.startsWith('/app/')){
+    const id = path.replace('/app/','').split('/')[0];
+    if(id)open(id,push);
+  } else if(path.startsWith('/dev/')){
+    const name = path.replace('/dev/','').split('/')[0];
+    if(name)openDev(name,push);
+  } else if(path==='/search'||location.search.includes('q=')){
+    const params = new URLSearchParams(location.search);
+    openSearch(params.get('q')||'',push);
+  } else if(path==='/games'||location.hash==='#games'){
+    go(1,'l',push);
+  } else if(path==='/me'||location.hash==='#me'){
+    go(2,'l',push);
+  } else {
+    go(0,'l',push);
+  }
+}
+
+// Initial route execution
+route(false);
+</script>
+</body>
+</html>
