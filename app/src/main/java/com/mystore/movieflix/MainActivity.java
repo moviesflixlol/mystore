@@ -1,17 +1,28 @@
 package com.mystore.movieflix;
 
-import android.app.DownloadManager;
+import android.Manifest;
+import android.annotation.TargetApi;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.Settings;
 import android.webkit.DownloadListener;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
@@ -20,24 +31,39 @@ import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.FileProvider;
 import androidx.webkit.WebViewAssetLoader;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String CHANNEL_ID = "mystore_downloads";
+    public static final String CHANNEL_NAME = "mystore Downloads";
+    private static final int PERM_NOTIF_CODE = 101;
+
     private WebView webView;
+    private final ExecutorService downloadExecutor = Executors.newFixedThreadPool(3);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        createNotificationChannel();
+        checkAndRequestPermissions();
 
         webView = new WebView(this);
         setContentView(webView);
@@ -63,7 +89,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // WebViewAssetLoader serves local assets over https://appassets.androidplatform.net/
-        // Registering both /assets/ and / ensures /header-logo-tight.png resolves properly
         final WebViewAssetLoader assetLoader = new WebViewAssetLoader.Builder()
                 .addPathHandler("/assets/", new WebViewAssetLoader.AssetsPathHandler(this))
                 .addPathHandler("/", new WebViewAssetLoader.AssetsPathHandler(this))
@@ -80,9 +105,7 @@ public class MainActivity extends AppCompatActivity {
                 String host = uri.getHost();
                 String path = uri.getPath();
 
-                // 1. Intercept store API requests (e.g. ws75.aptoide.com or /api-proxy)
-                // This executes the request via native Java HttpURLConnection, completely
-                // bypassing browser CORS and Cloudflare 403 blocks.
+                // 1. Intercept store API requests to bypass CORS and Cloudflare 403 blocks
                 if (host != null && (host.contains("aptoide.com") || host.contains("appassets.androidplatform.net") && path != null && (path.contains("api-proxy") || path.contains("proxy")))) {
                     WebResourceResponse proxied = proxyApiRequest(request);
                     if (proxied != null) {
@@ -98,11 +121,32 @@ public class MainActivity extends AppCompatActivity {
 
                 return super.shouldInterceptRequest(view, request);
             }
+
+            @Override
+            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+                runOnUiThread(() -> {
+                    if (webView != null) {
+                        webView.evaluateJavascript("window.showNoNetwork && window.showNoNetwork();", null);
+                    }
+                });
+            }
+
+            @TargetApi(Build.VERSION_CODES.M)
+            @Override
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                if (request != null && request.isForMainFrame()) {
+                    runOnUiThread(() -> {
+                        if (webView != null) {
+                            webView.evaluateJavascript("window.showNoNetwork && window.showNoNetwork();", null);
+                        }
+                    });
+                }
+            }
         });
 
         webView.setWebChromeClient(new WebChromeClient());
 
-        // JavaScript interface for package installer, updates & native fetch
+        // JavaScript interface for in-app installer, updates, notifications & native fetch
         WebAppInterface bridge = new WebAppInterface(this);
         webView.addJavascriptInterface(bridge, "Android");
         webView.addJavascriptInterface(bridge, "NuratixInstaller");
@@ -110,30 +154,35 @@ public class MainActivity extends AppCompatActivity {
         webView.setDownloadListener(new DownloadListener() {
             @Override
             public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimeType, long contentLength) {
-                try {
-                    DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-                    request.setMimeType(mimeType != null && mimeType.length() > 0 ? mimeType : "application/vnd.android.package-archive");
-                    request.addRequestHeader("User-Agent", userAgent);
-                    request.setTitle("Downloading Package");
-                    request.setDescription("mystore Package Installer");
-                    request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-                    request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "mystore_download.apk");
-
-                    DownloadManager dm = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-                    if (dm != null) {
-                        dm.enqueue(request);
-                        Toast.makeText(MainActivity.this, "Downloading package to /Download...", Toast.LENGTH_SHORT).show();
-                    }
-                } catch (Exception e) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse(url));
-                    startActivity(intent);
-                }
+                bridge.startDownloadAndInstall(url, "Download", "", "", "[]");
             }
         });
 
         // Load over secure origin via assetLoader
         webView.loadUrl("https://appassets.androidplatform.net/assets/index.html");
+    }
+
+    private void checkAndRequestPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, PERM_NOTIF_CODE);
+            }
+        }
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    CHANNEL_ID,
+                    CHANNEL_NAME,
+                    NotificationManager.IMPORTANCE_LOW
+            );
+            channel.setDescription("Shows download progress and install prompts for mystore packages");
+            NotificationManager nm = getSystemService(NotificationManager.class);
+            if (nm != null) {
+                nm.createNotificationChannel(channel);
+            }
+        }
     }
 
     private WebResourceResponse proxyApiRequest(WebResourceRequest request) {
@@ -182,6 +231,27 @@ public class MainActivity extends AppCompatActivity {
 
         WebAppInterface(Context c) {
             mContext = c;
+        }
+
+        @JavascriptInterface
+        public boolean isNetworkAvailable() {
+            try {
+                ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+                if (cm == null) return false;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    android.net.Network net = cm.getActiveNetwork();
+                    if (net == null) return false;
+                    NetworkCapabilities caps = cm.getNetworkCapabilities(net);
+                    return caps != null && (caps.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                                           caps.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+                                           caps.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET));
+                } else {
+                    NetworkInfo ni = cm.getActiveNetworkInfo();
+                    return ni != null && ni.isConnected();
+                }
+            } catch (Exception e) {
+                return true;
+            }
         }
 
         @JavascriptInterface
@@ -247,30 +317,224 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        /**
+         * Native In-App Downloader & Package Installer
+         * Downloads package bytes directly, posts system notification with progress,
+         * and triggers Android's Package Installer directly inside the app.
+         */
         @JavascriptInterface
-        public void installApk(String url, String name, String pkg, String splitsJson) {
-            runOnUiThread(() -> {
+        public void startDownloadAndInstall(String downloadUrl, String appName, String pkgName, String iconUrl, String splitsJson) {
+            if (downloadUrl == null || downloadUrl.isEmpty()) {
+                runOnUiThread(() -> Toast.makeText(mContext, "Download URL is invalid", Toast.LENGTH_SHORT).show());
+                return;
+            }
+
+            // Check Unknown Sources install permission on Android 8+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if (!mContext.getPackageManager().canRequestPackageInstalls()) {
+                    runOnUiThread(() -> {
+                        Toast.makeText(mContext, "Allow mystore to install downloaded apps", Toast.LENGTH_LONG).show();
+                        try {
+                            Intent reqIntent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
+                            reqIntent.setData(Uri.parse("package:" + mContext.getPackageName()));
+                            reqIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            mContext.startActivity(reqIntent);
+                        } catch (Exception ex) {
+                            // ignore
+                        }
+                    });
+                }
+            }
+
+            final String safeName = (appName != null && !appName.isEmpty()) ? appName : "App";
+            final String safePkg = (pkgName != null && !pkgName.isEmpty()) ? pkgName : ("pkg_" + System.currentTimeMillis());
+            final int notifId = Math.abs(safePkg.hashCode());
+
+            runOnUiThread(() -> Toast.makeText(mContext, "Downloading " + safeName + "...", Toast.LENGTH_SHORT).show());
+
+            downloadExecutor.execute(() -> {
+                NotificationManagerCompat nm = NotificationManagerCompat.from(mContext);
+                Bitmap largeIcon = null;
                 try {
-                    Toast.makeText(mContext, "Opening " + (name != null ? name : "Package") + " with Package Installer...", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setDataAndType(Uri.parse(url), "application/vnd.android.package-archive");
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    mContext.startActivity(intent);
-                } catch (Exception e) {
-                    try {
-                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                        browserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        mContext.startActivity(browserIntent);
-                    } catch (Exception ex) {
-                        Toast.makeText(mContext, "Installer error: " + ex.getMessage(), Toast.LENGTH_LONG).show();
+                    largeIcon = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.ic_launcher);
+                } catch (Exception ignored) {}
+
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext, CHANNEL_ID)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setContentTitle("Downloading " + safeName)
+                        .setContentText("Starting download...")
+                        .setOngoing(true)
+                        .setOnlyAlertOnce(true)
+                        .setProgress(100, 0, true)
+                        .setPriority(NotificationCompat.PRIORITY_LOW);
+
+                if (largeIcon != null) {
+                    builder.setLargeIcon(largeIcon);
+                }
+
+                try {
+                    nm.notify(notifId, builder.build());
+                } catch (SecurityException ignored) {}
+
+                File targetFile = null;
+                try {
+                    File downloadDir = new File(mContext.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "mystore_packages");
+                    if (!downloadDir.exists()) {
+                        downloadDir.mkdirs();
                     }
+
+                    String fileName = safeName.replaceAll("[^a-zA-Z0-9_-]", "_") + ".apk";
+                    targetFile = new File(downloadDir, fileName);
+
+                    URL url = new URL(downloadUrl);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("GET");
+                    conn.setConnectTimeout(15000);
+                    conn.setReadTimeout(30000);
+                    conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Linux; Android 14; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
+                    conn.connect();
+
+                    int responseCode = conn.getResponseCode();
+                    if (responseCode >= 400) {
+                        throw new Exception("HTTP " + responseCode);
+                    }
+
+                    int fileLength = conn.getContentLength();
+                    InputStream input = conn.getInputStream();
+                    FileOutputStream output = new FileOutputStream(targetFile);
+
+                    byte[] data = new byte[8192];
+                    long total = 0;
+                    int count;
+                    long lastUpdateTime = 0;
+
+                    while ((count = input.read(data)) != -1) {
+                        total += count;
+                        output.write(data, 0, count);
+
+                        long currentTime = System.currentTimeMillis();
+                        if (currentTime - lastUpdateTime > 280) {
+                            lastUpdateTime = currentTime;
+                            int progress = (fileLength > 0) ? (int) (total * 100 / fileLength) : 0;
+                            String text = progress + "% (" + formatBytes(total) + (fileLength > 0 ? " / " + formatBytes(fileLength) : "") + ")";
+
+                            builder.setProgress(100, progress, fileLength <= 0);
+                            builder.setContentText(text);
+
+                            try {
+                                nm.notify(notifId, builder.build());
+                            } catch (SecurityException ignored) {}
+
+                            final int finalProgress = progress;
+                            runOnUiThread(() -> {
+                                if (webView != null) {
+                                    webView.evaluateJavascript("window.onDownloadProgress && window.onDownloadProgress('" + safePkg + "', " + finalProgress + ");", null);
+                                }
+                            });
+                        }
+                    }
+
+                    output.flush();
+                    output.close();
+                    input.close();
+
+                    // Finished downloading
+                    final File finalApk = targetFile;
+                    runOnUiThread(() -> {
+                        if (webView != null) {
+                            webView.evaluateJavascript("window.onDownloadProgress && window.onDownloadProgress('" + safePkg + "', 100);", null);
+                            webView.evaluateJavascript("window.onDownloadComplete && window.onDownloadComplete('" + safePkg + "');", null);
+                        }
+                        installApkFile(finalApk, safeName);
+                    });
+
+                    // Build completion notification with click-to-install PendingIntent
+                    Intent installIntent = buildInstallIntent(targetFile);
+                    PendingIntent pendingIntent = PendingIntent.getActivity(
+                            mContext,
+                            notifId,
+                            installIntent,
+                            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? (PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE) : PendingIntent.FLAG_UPDATE_CURRENT
+                    );
+
+                    NotificationCompat.Builder completeNotif = new NotificationCompat.Builder(mContext, CHANNEL_ID)
+                            .setSmallIcon(R.mipmap.ic_launcher)
+                            .setContentTitle(safeName + " Ready to Install")
+                            .setContentText("Tap to launch Package Installer")
+                            .setAutoCancel(true)
+                            .setOngoing(false)
+                            .setContentIntent(pendingIntent)
+                            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+                    if (largeIcon != null) {
+                        completeNotif.setLargeIcon(largeIcon);
+                    }
+
+                    try {
+                        nm.notify(notifId, completeNotif.build());
+                    } catch (SecurityException ignored) {}
+
+                } catch (Exception e) {
+                    final String err = e.getMessage() != null ? e.getMessage() : "Network error";
+                    runOnUiThread(() -> {
+                        Toast.makeText(mContext, "Download failed: " + err, Toast.LENGTH_LONG).show();
+                        if (webView != null) {
+                            webView.evaluateJavascript("window.onDownloadFailed && window.onDownloadFailed('" + safePkg + "', '" + err.replace("'", "\\'") + "');", null);
+                        }
+                    });
+
+                    NotificationCompat.Builder failNotif = new NotificationCompat.Builder(mContext, CHANNEL_ID)
+                            .setSmallIcon(R.mipmap.ic_launcher)
+                            .setContentTitle("Download Failed: " + safeName)
+                            .setContentText(err)
+                            .setAutoCancel(true)
+                            .setOngoing(false)
+                            .setPriority(NotificationCompat.PRIORITY_LOW);
+
+                    try {
+                        nm.notify(notifId, failNotif.build());
+                    } catch (SecurityException ignored) {}
                 }
             });
         }
 
         @JavascriptInterface
+        public void installApk(String url, String name, String pkg, String splitsJson) {
+            startDownloadAndInstall(url, name, pkg, "", splitsJson);
+        }
+
+        @JavascriptInterface
         public void install(String url, String splitsJson) {
-            installApk(url, "App", "", splitsJson);
+            startDownloadAndInstall(url, "App", "", "", splitsJson);
+        }
+
+        private void installApkFile(File apkFile, String appName) {
+            try {
+                Intent intent = buildInstallIntent(apkFile);
+                mContext.startActivity(intent);
+            } catch (Exception ex) {
+                Toast.makeText(mContext, "Package Installer: " + ex.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }
+
+        private Intent buildInstallIntent(File apkFile) {
+            Uri contentUri = FileProvider.getUriForFile(
+                    mContext,
+                    mContext.getPackageName() + ".provider",
+                    apkFile
+            );
+
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            return intent;
+        }
+
+        private String formatBytes(long bytes) {
+            if (bytes <= 0) return "0 MB";
+            double mb = bytes / (1024.0 * 1024.0);
+            return String.format("%.1f MB", mb);
         }
     }
 
@@ -281,5 +545,11 @@ public class MainActivity extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        downloadExecutor.shutdownNow();
     }
 }

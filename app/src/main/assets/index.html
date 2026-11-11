@@ -944,6 +944,69 @@ button.get.installed, button.install-btn.installed{
 }
 
 @media(min-width:760px){main,header.home-bar,.fullscreen-view .content-wrap{max-width:1000px;margin-inline:auto}}
+
+/* Fullscreen No Network Screen */
+.offline-screen{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  background:#0a0a0a;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+}
+.offline-screen[hidden]{display:none !important;}
+.offline-card{
+  background:#141414;
+  border:1px solid #282828;
+  border-radius:24px;
+  padding:36px 28px;
+  max-width:380px;
+  width:100%;
+  text-align:center;
+  box-shadow:0 12px 40px rgba(0,0,0,0.6);
+}
+.offline-icon{
+  width:80px;
+  height:80px;
+  border-radius:24px;
+  background:rgba(229,9,20,0.12);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  margin:0 auto 20px;
+}
+.offline-card h2{
+  margin:0 0 10px;
+  font-size:22px;
+  font-weight:700;
+  color:#fff;
+}
+.offline-card p{
+  margin:0 0 24px;
+  font-size:14px;
+  color:#aaa;
+  line-height:1.5;
+}
+.retry-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  background:#e50914;
+  color:#fff;
+  border:none;
+  border-radius:99px;
+  padding:14px 28px;
+  font-size:15px;
+  font-weight:700;
+  cursor:pointer;
+  width:100%;
+  transition:transform 0.15s, background 0.15s;
+}
+.retry-btn:active{transform:scale(0.96);background:#b80710;}
+
 </style>
 </head>
 <body>
@@ -1141,8 +1204,127 @@ button.get.installed, button.install-btn.installed{
 <!-- Toast notification -->
 <div id="toast"></div>
 
+<!-- Fullscreen No Network Screen -->
+<div id="no-network-view" class="offline-screen" hidden>
+  <div class="offline-card">
+    <div class="offline-icon">
+      <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#e50914" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="1" y1="1" x2="23" y2="23"/>
+        <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/>
+        <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/>
+        <path d="M10.71 5.05A16 16 0 0 1 22.58 9"/>
+        <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/>
+        <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
+        <line x1="12" y1="20" x2="12.01" y2="20"/>
+      </svg>
+    </div>
+    <h2>No Internet Connection</h2>
+    <p>You appear to be offline. Please verify your Wi-Fi or mobile data connection and tap below to retry.</p>
+    <button class="retry-btn" id="btn-retry-network">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.19"/></svg>
+      Try Again
+    </button>
+  </div>
+</div>
+
+
 <script>
 const LOGO_DATA = "data:image/png;base64,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";
+
+/* Local Metadata Cache (Instant 0ms App Loading & Offline Reliability) */
+const metadataCache = {
+  prefix: 'mystore_cache_v3_',
+  get(key){
+    try{
+      const raw = localStorage.getItem(this.prefix + key);
+      if(!raw) return null;
+      const parsed = JSON.parse(raw);
+      return parsed.data;
+    }catch(_){ return null; }
+  },
+  set(key, data){
+    try{
+      localStorage.setItem(this.prefix + key, JSON.stringify({
+        time: Date.now(),
+        data: data
+      }));
+    }catch(_){
+      this.prune();
+    }
+  },
+  prune(){
+    try{
+      const toRemove = [];
+      for(let i=0; i<localStorage.length; i++){
+        const k = localStorage.key(i);
+        if(k && k.startsWith('mystore_cache_')){
+          toRemove.push(k);
+        }
+      }
+      toRemove.forEach(k => localStorage.removeItem(k));
+    }catch(_){}
+  }
+};
+
+/* Global Native Download Callbacks */
+window.onDownloadProgress = function(pkg, progress){
+  for(const k in activeDownloads){
+    const dl = activeDownloads[k];
+    if(dl && (dl.pkg === pkg || dl.id == pkg)){
+      dl.pct = progress;
+      setButtonProgress(dl.id, progress);
+    }
+  }
+};
+
+window.onDownloadComplete = function(pkg){
+  for(const k in activeDownloads){
+    const dl = activeDownloads[k];
+    if(dl && (dl.pkg === pkg || dl.id == pkg)){
+      setButtonCompleted(dl.id, dl.isSplit);
+      delete activeDownloads[dl.id];
+      delete activeDownloads[pkg];
+    }
+  }
+  toast('Download complete! Opening Package Installer...');
+  if(page === 2 && !det.classList.contains('open')){
+    checkUpdates();
+  }
+};
+
+window.onDownloadFailed = function(pkg, err){
+  for(const k in activeDownloads){
+    const dl = activeDownloads[k];
+    if(dl && (dl.pkg === pkg || dl.id == pkg)){
+      resetButtonProgress(dl.id);
+      delete activeDownloads[dl.id];
+      delete activeDownloads[pkg];
+    }
+  }
+  toast('Download failed: ' + (err || 'network error'));
+};
+
+window.showNoNetwork = function(){
+  const netView = $('#no-network-view');
+  if(netView) netView.hidden = false;
+};
+
+window.hideNoNetwork = function(){
+  const netView = $('#no-network-view');
+  if(netView) netView.hidden = true;
+};
+
+window.addEventListener('offline', () => {
+  toast('Connection lost. Working in offline mode.');
+  window.showNoNetwork();
+});
+
+window.addEventListener('online', () => {
+  window.hideNoNetwork();
+  toast('Connection restored! Updating store...');
+  [home, games, me][page]();
+});
+
 const API='https://ws75.aptoide.com/api/7';
 const $=s=>document.querySelector(s),main=$('#main'),det=$('#det'),searchView=$('#search-view'),devView=$('#dev-view');
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -1440,6 +1622,17 @@ async function home(){
     <div id="sen"></div>
   `;
 
+  // 0. Instant Cache Hydration: Render cached feed in 0ms!
+  const cachedFeed = metadataCache.get('home_feed_v3');
+  if(cachedFeed && cachedFeed.allApps && cachedFeed.allApps.length){
+    try {
+      (cachedFeed.allApps||[]).forEach(a => { cache[a.id] = a; });
+      // If heroApps exist
+      const gfxPool = (cachedFeed.allApps||[]).filter(a => a.gfx && a.gfx.length > 20);
+      if(gfxPool.length) hero(gfxPool.slice(0, 6));
+    } catch(_) {}
+  }
+
   const seenIds = new Set();
 
   try{
@@ -1452,6 +1645,13 @@ async function home(){
     ]);
 
     const allApps = [...downloadsList, ...pdownloadsList, ...latestList, ...gamesList];
+    if(allApps.length){
+      metadataCache.set('home_feed_v3', { allApps, downloadsList, pdownloadsList, latestList, gamesList });
+      allApps.forEach(a => {
+        cache[a.id] = a;
+        metadataCache.set('app_' + a.id, a);
+      });
+    }
 
     // 1. Hero: ONLY apps with REAL company graphic images from data
     const gfxPool = allApps.filter(a => a.gfx && a.gfx.length > 20 && !a.gfx.includes('placeholder'));
@@ -2273,7 +2473,7 @@ function populateDetailsFeed(currentId, devName){
 
 async function open(id, push=true){
   closeAllModals(false);
-  let a = cache[id];
+  let a = cache[id] || metadataCache.get('app_' + id);
 
   det.classList.add('open');
   det.scrollTop = 0;
@@ -2285,7 +2485,12 @@ async function open(id, push=true){
   // If already in cache: 0ms instant display!
   if(a){
     document.title = a.name + ' — Nuratix Store';
-    renderAppDetails(a, null);
+    const cachedMeta = metadataCache.get('meta_' + id);
+    if(cachedMeta && cachedMeta.name){
+      renderAppDetails(a, cachedMeta);
+    } else {
+      renderAppDetails(a, null);
+    }
   } else {
     // Skeleton state if opening cold from direct link
     document.title = 'App Details — Nuratix Store';
@@ -2325,6 +2530,8 @@ async function open(id, push=true){
       });
     }
     document.title = (m.name || a.name) + ' — Nuratix Store';
+    metadataCache.set('meta_' + id, m);
+    metadataCache.set('app_' + id, a);
     renderAppDetails(a, m);
   } catch(e) {
     console.warn('Extended meta failed to load:', e);
@@ -2469,9 +2676,9 @@ function launchPackageInstaller(apkUrl, appName, pkg, splits){
 
 /* Streamed Download with Circular Progress Bar & Package Registration */
 async function triggerDownloadAndInstall(id){
-  const a = cache[id] || { id, name: 'Application' };
+  const a = cache[id] || metadataCache.get('app_' + id) || { id, name: 'Application' };
   if(activeDownloads[id]){
-    toast('Download already in progress (' + activeDownloads[id].pct + '%)');
+    toast('Download already in progress (' + (activeDownloads[id].pct || 0) + '%)');
     return;
   }
 
@@ -2479,66 +2686,75 @@ async function triggerDownloadAndInstall(id){
   toast(`Starting download for ${a.name || 'Application'}...`);
 
   try {
-    // Fetch full metadata for download path and split packages
-    const metaRes = await api(`/app/get/app_id=${encodeURIComponent(id)}`).catch(() => null);
-    const m = metaRes?.nodes?.meta?.data || {};
-    const file = m.file || {};
-    const apkUrl = https(file.path || file.path_alt || a.apk);
+    // 1. Fetch extended metadata for download target and split APKs
+    let meta = metadataCache.get('meta_' + id);
+    if(!meta){
+      const metaRes = await api(`/app/get/app_id=${encodeURIComponent(id)}`).catch(() => null);
+      meta = metaRes?.nodes?.meta?.data || {};
+      if(meta.name) metadataCache.set('meta_' + id, meta);
+    }
+    const file = meta.file || {};
     const splits = file.splits || [];
     const isSplit = Array.isArray(splits) && splits.length > 0;
     const vername = file.vername || a.vername || '1.0.0';
     const vercode = file.vercode || a.vercode || 1;
     const size = file.filesize || a.size || 0;
+    const apkUrl = file.path || file.path_alt || a.apk;
+    const pkgName = meta.package || a.pkg || a.package || ('com.app.' + id);
+    const appName = meta.name || a.name || 'Application';
 
-    const downloadTarget = apkUrl || a.apk;
-    if(!downloadTarget){
+    if(!apkUrl){
       throw Error('Package download URL is currently unavailable');
     }
 
-    // Circular progress animation (0% -> 100%)
-    activeDownloads[id] = { pct: 0 };
-    await new Promise((resolve) => {
-      let progress = 0;
-      const interval = setInterval(() => {
-        const step = progress < 60 ? Math.floor(Math.random() * 14) + 10 : Math.floor(Math.random() * 8) + 6;
-        progress = Math.min(100, progress + step);
-        activeDownloads[id].pct = progress;
-        setButtonProgress(id, progress);
+    activeDownloads[id] = { id, pkg: pkgName, pct: 0, isSplit };
+    activeDownloads[pkgName] = activeDownloads[id];
 
-        if(progress >= 100){
-          clearInterval(interval);
-          resolve();
-        }
-      }, 160);
-    });
-
-    delete activeDownloads[id];
-
-    // Save/Update in installedStore
+    // Save in installedStore immediately
     installedStore.add(
       {
         id: a.id,
-        name: m.name || a.name,
-        pkg: m.package || a.pkg || a.package,
-        icon: m.icon || a.icon,
-        dev: m.developer?.name || a.dev
+        name: appName,
+        pkg: pkgName,
+        icon: meta.icon || a.icon,
+        dev: meta.developer?.name || a.dev
       },
       {
         vername,
         vercode,
         filesize: size,
-        path: downloadTarget,
+        path: apkUrl,
         splits: isSplit ? splits : null
       }
     );
 
-    setButtonCompleted(id, isSplit);
-    launchPackageInstaller(downloadTarget, m.name || a.name, m.package || a.pkg, isSplit ? splits : null);
-
-    // Refresh Updates shelf if currently in Me section
-    if(page === 2 && !det.classList.contains('open')){
-      checkUpdates();
+    // 2. Check Native In-App Downloader & Package Installer Bridge
+    if(window.Android && typeof window.Android.startDownloadAndInstall === 'function'){
+      window.Android.startDownloadAndInstall(apkUrl, appName, pkgName, meta.icon || a.icon || '', JSON.stringify(splits || []));
+      toast(`Downloading ${appName}... View notification for progress.`);
+      return;
     }
+
+    // 3. Fallback for browser testing
+    let progress = 0;
+    const interval = setInterval(() => {
+      progress = Math.min(100, progress + 14);
+      activeDownloads[id].pct = progress;
+      setButtonProgress(id, progress);
+      if(progress >= 100){
+        clearInterval(interval);
+        setButtonCompleted(id, isSplit);
+        delete activeDownloads[id];
+        delete activeDownloads[pkgName];
+        const aEl = document.createElement('a');
+        aEl.href = apkUrl;
+        aEl.download = appName.replace(/[^a-zA-Z0-9_-]/g, '_') + '.apk';
+        document.body.appendChild(aEl);
+        aEl.click();
+        document.body.removeChild(aEl);
+      }
+    }, 150);
+
   } catch(err) {
     delete activeDownloads[id];
     resetButtonProgress(id);
@@ -2567,6 +2783,20 @@ function shareDev(){
 
 /* Event Delegation */
 document.addEventListener('click',e=>{
+  
+  // Offline Retry Button
+  if(e.target.closest('#btn-retry-network')){
+    const isOnline = navigator.onLine && (!window.Android || !window.Android.isNetworkAvailable || window.Android.isNetworkAvailable());
+    if(isOnline){
+      window.hideNoNetwork();
+      toast('Reconnecting...');
+      [home, games, me][page]();
+    } else {
+      toast('Still offline. Please check your connection.');
+    }
+    return;
+  }
+
   if(e.target.closest('#logo'))return go(0,'r');
 
   // Search open/close
