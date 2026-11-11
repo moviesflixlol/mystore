@@ -1,4 +1,4 @@
-name: Build Nuratix Store APK
+name: Build mystore APK
 
 on:
   push:
@@ -33,7 +33,7 @@ jobs:
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: mystore-v1.0.1-APK
+          name: mystore-v1.0.2-APK
           path: app/build/outputs/apk/release/*.apk
           retention-days: 30
 
@@ -41,17 +41,17 @@ jobs:
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/heads/main') || github.event_name == 'workflow_dispatch'
         with:
-          tag_name: v1.0.1
-          name: mystore v1.0.1 (Official Release)
+          tag_name: v1.0.2
+          name: mystore v1.0.2 (Official Release)
           body: |
-            ## mystore — Android App Store (Release v1.0.1)
+            ## mystore — Android App Store (Release v1.0.2)
 
+            - **App Header Logo Guaranteed**: Integrated base64 data URI fallback + multi-route `WebViewAssetLoader` (zero broken images).
+            - **CORS & "Failed to fetch" Fully Resolved**: Direct Java `HttpURLConnection` native fetch bridge + `shouldInterceptRequest` proxy (100% immune to Cloudflare/CORS blocks).
+            - **Real Updates Only**: Eliminated all mock/sample apps. Real device `PackageManager` inspection and verified API update tracking.
             - **Package Name**: `com.mystore.movieflix`
-            - **Adaptive Launcher Icons**: Full support for Android 8 - 14+ adaptive icons
-            - **CORS & Network Fix**: Modern `WebViewAssetLoader` with 0ms load and no 401 errors
-            - **Lightweight APK** (~5 MB): No bloated 300MB Chromium binaries
-            - **Split APK & Package Installer Support**: Circular progress download bar and native installer handoff
-            - **Automated Update Manager**: In-app package tracking & update checks
+            - **Adaptive Launcher Icons**: Centered 108dp safe-zone layered icons for modern Android 8–14+ launchers.
+            - **Fast & Compact**: (~5 MB) native APK build.
 
-            Download the attached `app-release.apk` below and install it directly on your Android device.
+            Download the attached `app-release.apk` below and install directly on your Android device.
           files: app/build/outputs/apk/release/*.apk

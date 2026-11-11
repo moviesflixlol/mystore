@@ -41,7 +41,7 @@
   "applicationCategory": "Application",
   "operatingSystem": "Android",
   "image": "/icon-512.png",
-  "logo": "/header-logo-tight.png",
+  "logo": "header-logo-tight.png",
   "description": "Discover, explore, and download top Android applications and games directly from mystore."
 }
 </script>
@@ -950,8 +950,8 @@ button.get.installed, button.install-btn.installed{
 
 <!-- Home Transparent Bar: Just Red Logo and Modern Search Button -->
 <header class="home-bar" id="home-bar">
-  <div class="logo" id="logo" role="button" aria-label="Nuratix Store Home">
-    <img src="/header-logo-tight.png" alt="Nuratix Store" width="42" height="42">
+  <div class="logo" id="logo" role="button" aria-label="mystore Home">
+    <img src="header-logo-tight.png" onerror="if(this.src!==LOGO_DATA)this.src=LOGO_DATA" alt="mystore" width="42" height="42">
   </div>
   <button class="search-trigger" id="btn-open-search" aria-label="Search">
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
@@ -1142,6 +1142,7 @@ button.get.installed, button.install-btn.installed{
 <div id="toast"></div>
 
 <script>
+const LOGO_DATA = "data:image/png;base64,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";
 const API='https://ws75.aptoide.com/api/7';
 const $=s=>document.querySelector(s),main=$('#main'),det=$('#det'),searchView=$('#search-view'),devView=$('#dev-view');
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -1190,13 +1191,21 @@ async function fetchWithTimeout(url, opts={}, ms=4000){
 
 async function api(p){
   const u = API + p;
-  // 1. Direct fetch with 4.5s timeout
-  try{
-    const r = await fetchWithTimeout(u, { mode: 'cors' }, 4500);
-    if(r.ok) return await r.json();
-  }catch(_){}
 
-  // 2. Local proxy with 4s timeout (when running with local Python server)
+  // 1. Android Native Bridge (Runs directly in Java HttpURLConnection, 100% bypasses CORS and Cloudflare blocks)
+  if(window.Android && typeof window.Android.nativeFetch === 'function'){
+    try{
+      const raw = window.Android.nativeFetch(u);
+      if(raw && raw.length > 5){
+        const parsed = JSON.parse(raw);
+        if(parsed) return parsed;
+      }
+    }catch(e){
+      console.warn('Android nativeFetch error:', e);
+    }
+  }
+
+  // 2. Local Python proxy (when running via web_server.py on localhost)
   if(location.protocol.startsWith('http') && !location.hostname.includes('androidplatform.net')){
     try{
       const r = await fetchWithTimeout('/proxy?url=' + encodeURIComponent(u), {}, 4000);
@@ -1204,10 +1213,25 @@ async function api(p){
     }catch(_){}
   }
 
-  // 3. Fallback direct fetch without timeout wrapper
-  const r = await fetch(u);
-  if(!r.ok) throw Error('Network error: ' + r.status);
-  return r.json();
+  // 3. Direct fetch (handled by shouldInterceptRequest proxy inside APK, or standard CORS)
+  try{
+    const r = await fetchWithTimeout(u, {}, 5000);
+    if(r.ok) return await r.json();
+  }catch(_){}
+
+  // 4. In-app or local proxy fallback
+  try{
+    const r = await fetchWithTimeout('/api-proxy?url=' + encodeURIComponent(u), {}, 5000);
+    if(r.ok) return await r.json();
+  }catch(_){}
+
+  // 5. Public CORS proxy fallback
+  try{
+    const r = await fetchWithTimeout('https://api.allorigins.win/raw?url=' + encodeURIComponent(u), {}, 6000);
+    if(r.ok) return await r.json();
+  }catch(_){}
+
+  throw Error('Failed to load data from server');
 }
 
 const cache={};
@@ -1673,43 +1697,16 @@ async function games(){
 
 /* Installed Apps & Local Package Registry (Tracks APKs downloaded via Nuratix Store) */
 const installedStore = {
-  key: 'nuratix_installed_apps',
+  key: 'mystore_installed_packages_v2',
   get(){
+    // Clear any previous mock stores
+    try{ localStorage.removeItem('nuratix_installed_apps'); }catch(_){}
     try{
       const raw = localStorage.getItem(this.key);
       if(raw) return JSON.parse(raw);
     }catch(_){}
-    // Initial sample downloaded apps so the user can immediately test and see update checking in action
-    const initial = [
-      {
-        id: 77455811,
-        name: 'YouTube Music',
-        pkg: 'com.google.android.apps.youtube.music',
-        icon: 'https://pool.img.aptoide.com/market2019arabic/13725b842df082269a8ca6a20fdfbf62_icon.png',
-        dev: 'Google Inc.',
-        vername: '9.40.10',
-        vercode: 94010000,
-        size: 77297565,
-        downloadedAt: Date.now() - 86400000 * 2,
-        isSplit: false,
-        status: 'installed'
-      },
-      {
-        id: 77521479,
-        name: 'Grok',
-        pkg: 'ai.x.grok',
-        icon: 'https://pool.img.aptoide.com/appupdater/063ea166bc953e3089c602dccdd4d66b_icon.png',
-        dev: 'xAI',
-        vername: '1.2.50',
-        vercode: 11250000,
-        size: 45000000,
-        downloadedAt: Date.now() - 86400000 * 3,
-        isSplit: false,
-        status: 'installed'
-      }
-    ];
-    this.save(initial);
-    return initial;
+    // Zero mock data: only real packages downloaded through mystore
+    return [];
   },
   save(list){
     try{ localStorage.setItem(this.key, JSON.stringify(list)); }catch(_){}
@@ -1760,7 +1757,7 @@ function me(){
     <!-- User / Device Header -->
     <div class="me-card">
       <div class="me-avatar">
-        <img src="/header-logo-tight.png" alt="Nuratix Store">
+        <img src="header-logo-tight.png" onerror="if(this.src!==LOGO_DATA)this.src=LOGO_DATA" alt="mystore">
       </div>
       <div class="me-info">
         <h3>My Device &amp; Apps</h3>
@@ -1827,7 +1824,7 @@ async function checkUpdates(){
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#25d366" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
         <div>
           <b>All Applications Up to Date</b>
-          <p style="margin:2px 0 0;font-size:13px;color:var(--mu);">No downloaded apps require updating.</p>
+          <p style="margin:2px 0 0;font-size:13px;color:var(--mu);">No apps downloaded yet. Applications you install via mystore will be tracked and checked for updates here.</p>
         </div>
       </div>
     `;
@@ -1840,20 +1837,28 @@ async function checkUpdates(){
 
   for(const app of list){
     try {
+      let currentVercode = Number(app.vercode) || 0;
+      let currentVername = app.vername || '';
+      if(window.Android && typeof window.Android.getPackageVersionCode === 'function'){
+        const deviceCode = window.Android.getPackageVersionCode(app.pkg);
+        if(deviceCode > 0) currentVercode = deviceCode;
+        const deviceName = window.Android.getPackageVersionName(app.pkg);
+        if(deviceName) currentVername = deviceName;
+      }
+
       const res = await api(`/app/get/app_id=${encodeURIComponent(app.id)}`);
       const m = res?.nodes?.meta?.data || {};
       const file = m.file || {};
       const latestVername = file.vername || '';
       const latestVercode = Number(file.vercode) || 0;
-      const currentVercode = Number(app.vercode) || 0;
 
-      // Update available if higher version code or different version name
-      if((latestVercode > 0 && latestVercode > currentVercode) || (latestVername && latestVername !== app.vername)){
+      if((latestVercode > 0 && latestVercode > currentVercode) || (latestVername && latestVername !== currentVername)){
         const splits = file.splits || [];
         updateCandidates.push({
           app,
           latestVername,
           latestVercode,
+          currentVername,
           latestSize: file.filesize || app.size,
           apkUrl: file.path || file.path_alt,
           splits: splits,
@@ -1870,7 +1875,7 @@ async function checkUpdates(){
         <div class="update-info" data-open="${u.app.id}">
           <b>${esc(u.app.name)}</b>
           <span class="update-badge">Update Available: v${esc(u.latestVername)}</span>
-          <span class="update-sub">Installed: v${esc(u.app.vername)} · ${fmtS(u.latestSize)}${u.isSplit ? ' · Split APK' : ''}</span>
+          <span class="update-sub">Installed: v${esc(u.currentVername)} · ${fmtS(u.latestSize)}${u.isSplit ? ' · Split APK' : ''}</span>
         </div>
         <button class="get update-btn" data-update-id="${u.app.id}" data-get="${u.app.id}">Update</button>
       </div>
